@@ -74,17 +74,28 @@ def read_data():
     
     return [str(nu_v), str(nu_i), str(nu_g), str(Em_v), str(Em_i), str(Em_g), str(Eb_v_g), str(Eb_v_2g), str(Eb_2g), str(Ef_v), str(a0), str(Omega), str(f), str(b), str(k_B), str(gamma_b), str(B), str(r_ppt), str(d), str(N_ppt), str(rho), str(Z_i)]
 
+def parse_output(output):
+    lines = output.strip().split('\n')
+    data = [list(map(float, line.strip().split())) for line in lines]
+    return np.array(data)
+
 if __name__ == '__main__':
     
+    # Read the data from the Excel file
     list_of_parameters = read_data()
     
-    # Run the program and capture the output
+    # Solve the ODE by running c++ executable
     result = subprocess.run(['./build/main'] + list_of_parameters, capture_output=True, text=True)
     
+    # Print the output
+    print(result.stdout)
+
     # Check for errors
     if result.returncode != 0:
         print("Execution failed")
         print(result.stderr)
         exit(1)
     
-    print(result.stdout)
+    data_np = parse_output(result.stdout)
+
+    print('Parsing complete ')

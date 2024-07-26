@@ -1,4 +1,5 @@
 #include "parameters.h"
+#include <iomanip>
 #include <iostream>
 #include <string>
 #include <cmath>
@@ -10,6 +11,8 @@
 #include <sundials/sundials_types.h>     // definition of realtype
 #include <sundials/sundials_dense.h>     // generic DENSE solver
 #include <sundials/sundials_types.h>     // definition of realtype
+#include <sunlinsol/sunlinsol_dense.h>   // access to dense SUNLinearSolver
+#include <sunmatrix/sunmatrix_dense.h>   // access to dense SUNMatrix
 
 
 // Declare and define file-level constants
@@ -24,8 +27,8 @@ const double he_2_dpa = 5e-6;
 
 std::map<std::string, double> props;
 
-// std::map<std::string, double> get_properties(char *argv[]) {
-std::map<std::string, double> get_properties() {
+std::map<std::string, double> get_properties(char *argv[]) {
+// std::map<std::string, double> get_properties() {
     // std::map<std::string, double> props;
     // props["nu_v"] = std::stod(argv[1]);
     // props["nu_i"] = std::stod(argv[2]);
@@ -51,75 +54,75 @@ std::map<std::string, double> get_properties() {
     // props["Z_i"] = std::stod(argv[22]);
 
 
-    // std::string nu_v_str = argv[1];
-    // std::string nu_i_str = argv[2];
-    // std::string nu_g_str = argv[3];
+    std::string nu_v_str = argv[1];
+    std::string nu_i_str = argv[2];
+    std::string nu_g_str = argv[3];
 
-    // std::string Em_v_str = argv[4];
-    // std::string Em_i_str = argv[5];
-    // std::string Em_g_str = argv[6];
-    // std::string Eb_v_g_str = argv[7];
-    // std::string Eb_v_2g_str = argv[8];
-    // std::string Eb_2g_str = argv[9];
-    // std::string Ef_v_str = argv[10];
-    // std::string a0_str = argv[11];
-    // std::string Omega_str = argv[12];
-    // std::string f_str = argv[13];
-    // std::string b_str = argv[14];
-    // std::string k_B_str = argv[15];
-    // std::string gamma_b_str = argv[16];
-    // std::string B_str = argv[17];
-    // std::string r_ppt_str = argv[18];
-    // std::string d_str = argv[19];
-    // std::string N_ppt_str = argv[20];
-    // std::string rho_str = argv[21];
-    // std::string Z_i_str = argv[22];
+    std::string Em_v_str = argv[4];
+    std::string Em_i_str = argv[5];
+    std::string Em_g_str = argv[6];
+    std::string Eb_v_g_str = argv[7];
+    std::string Eb_v_2g_str = argv[8];
+    std::string Eb_2g_str = argv[9];
+    std::string Ef_v_str = argv[10];
+    std::string a0_str = argv[11];
+    std::string Omega_str = argv[12];
+    std::string f_str = argv[13];
+    std::string b_str = argv[14];
+    std::string k_B_str = argv[15];
+    std::string gamma_b_str = argv[16];
+    std::string B_str = argv[17];
+    std::string r_ppt_str = argv[18];
+    std::string d_str = argv[19];
+    std::string N_ppt_str = argv[20];
+    std::string rho_str = argv[21];
+    std::string Z_i_str = argv[22];
 
-    // double nu_v = std::stod(nu_v_str);
-    // double nu_i = std::stod(nu_i_str);
-    // double nu_g = std::stod(nu_g_str);
-    // double Em_v = std::stod(Em_v_str);
-    // double Em_i = std::stod(Em_i_str);
-    // double Em_g = std::stod(Em_g_str);
-    // double Eb_v_g = std::stod(Eb_v_g_str);
-    // double Eb_v_2g = std::stod(Eb_v_2g_str);
-    // double Eb_2g = std::stod(Eb_2g_str);
-    // double Ef_v = std::stod(Ef_v_str);
-    // double a0 = std::stod(a0_str);
-    // double Omega = std::stod(Omega_str);
-    // double f = std::stod(f_str);
-    // double b = std::stod(b_str);
-    // double k_B = std::stod(k_B_str);
-    // double gamma_b = std::stod(gamma_b_str);
-    // double B = std::stod(B_str);
-    // double r_ppt = std::stod(r_ppt_str);
-    // double d = std::stod(d_str);
-    // double N_ppt = std::stod(N_ppt_str);
-    // double rho = std::stod(rho_str);
-    // double Z_i = std::stod(Z_i_str);
+    double nu_v = std::stod(nu_v_str);
+    double nu_i = std::stod(nu_i_str);
+    double nu_g = std::stod(nu_g_str);
+    double Em_v = std::stod(Em_v_str);
+    double Em_i = std::stod(Em_i_str);
+    double Em_g = std::stod(Em_g_str);
+    double Eb_v_g = std::stod(Eb_v_g_str);
+    double Eb_v_2g = std::stod(Eb_v_2g_str);
+    double Eb_2g = std::stod(Eb_2g_str);
+    double Ef_v = std::stod(Ef_v_str);
+    double a0 = std::stod(a0_str);
+    double Omega = std::stod(Omega_str);
+    double f = std::stod(f_str);
+    double b = std::stod(b_str);
+    double k_B = std::stod(k_B_str);
+    double gamma_b = std::stod(gamma_b_str);
+    double B = std::stod(B_str);
+    double r_ppt = std::stod(r_ppt_str);
+    double d = std::stod(d_str);
+    double N_ppt = std::stod(N_ppt_str);
+    double rho = std::stod(rho_str);
+    double Z_i = std::stod(Z_i_str);
 
-    double nu_v = 5000000000000.0;
-    double nu_i = 50000000000000.0;
-    double nu_g = 50000000000000.0;
-    double Em_v = 1.4;
-    double Em_i = 0.2;
-    double Em_g = 0.2;
-    double Eb_v_g = 2.4;
-    double Eb_v_2g = 3.5;
-    double Eb_2g = 0.79;
-    double Ef_v = 1.6;
-    double a0 = 3.63e-10;
-    double Omega = 1.1958036749999998e-29;
-    double f = 0.1;
-    double b = 10.0;
-    double k_B = 8.617e-05;
-    double gamma_b = 6.24e+18;
-    double B = 1.75e-29;
-    double r_ppt = 1e-08;
-    double d = 3e-05;
-    double N_ppt = 1e+16;
-    double rho = 300000000000000.0;
-    double Z_i = 1.2;
+    // double nu_v = 5000000000000.0;
+    // double nu_i = 50000000000000.0;
+    // double nu_g = 50000000000000.0;
+    // double Em_v = 1.4;
+    // double Em_i = 0.2;
+    // double Em_g = 0.2;
+    // double Eb_v_g = 2.4;
+    // double Eb_v_2g = 3.5;
+    // double Eb_2g = 0.79;
+    // double Ef_v = 1.6;
+    // double a0 = 3.63e-10;
+    // double Omega = 1.1958036749999998e-29;
+    // double f = 0.1;
+    // double b = 10.0;
+    // double k_B = 8.617e-05;
+    // double gamma_b = 6.24e+18;
+    // double B = 1.75e-29;
+    // double r_ppt = 1e-08;
+    // double d = 3e-05;
+    // double N_ppt = 1e+16;
+    // double rho = 300000000000000.0;
+    // double Z_i = 1.2;
 
     // Reaction frequencies
     double alpha = 48 * nu_i * exp(-Em_i / (k_B * T));
@@ -244,7 +247,7 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
     NV_Ith_S(ydot, 3) = (beta * NV_Ith_S(y, 2) * NV_Ith_S(y, 0) + (beta * e2 + 2 * delta) * NV_Ith_S(y, 4) - (beta * e1 + delta + alpha * NV_Ith_S(y, 1) + beta * NV_Ith_S(y, 2)) * NV_Ith_S(y, 3));
     NV_Ith_S(ydot, 4) = (beta * NV_Ith_S(y, 2) * NV_Ith_S(y, 3) + 3 * delta * NV_Ith_S(y, 6) + 2 * gamma_val * NV_Ith_S(y, 0) * NV_Ith_S(y, 5) - (2 * beta * NV_Ith_S(y, 2) + 2 * delta + beta * e2 + 2 * alpha * NV_Ith_S(y, 1)) * NV_Ith_S(y, 4));
     NV_Ith_S(ydot, 5) = (alpha * NV_Ith_S(y, 1) * NV_Ith_S(y, 4) + 2 * beta * NV_Ith_S(y, 2) * NV_Ith_S(y, 2) - (2 * delta + 2 * gamma_val * NV_Ith_S(y, 0) + 2 * beta * NV_Ith_S(y, 2)) * NV_Ith_S(y, 5));
-    NV_Ith_S(ydot, 6) = (2 * beta * NV_Ith_S(y, 2) * (NV_Ith_S(y, 4) + NV_Ith_S(y, 5)) - 3 * NV_Ith_S(ydot, 6) * (delta + alpha * NV_Ith_S(y, 1) + beta * NV_Ith_S(y, 2) + gamma_val * NV_Ith_S(y, 0)));
+    NV_Ith_S(ydot, 6) = (2 * beta * NV_Ith_S(y, 2) * (NV_Ith_S(y, 4) + NV_Ith_S(y, 5)) - 3 * NV_Ith_S(y, 6) * (delta + alpha * NV_Ith_S(y, 1) + beta * NV_Ith_S(y, 2) + gamma_val * NV_Ith_S(y, 0)));
     NV_Ith_S(ydot, 7) = ((12 * beta * NV_Ith_S(y, 2) + 9 * gamma_val * NV_Ith_S(y, 0)) * NV_Ith_S(y, 6)) / NV_Ith_S(y, 8);
     NV_Ith_S(ydot, 8) = epsilon * beta * NV_Ith_S(y, 2) - delta * NV_Ith_S(y, 8);
     NV_Ith_S(ydot, 9) = (a0 * a0 / NV_Ith_S(y, 9)) * (gamma_val * NV_Ith_S(y, 0) - alpha * NV_Ith_S(y, 1) - gamma_val * (e3 - e4));
@@ -255,13 +258,20 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
     if (NV_Ith_S(ydot, 11) < 0) NV_Ith_S(ydot, 11) = 0;
     NV_Ith_S(ydot, 12) = beta * C_gb * NV_Ith_S(y, 2) - delta * NV_Ith_S(y, 12);
 
+    // Print values to console
+    // std::cout << "t: " << t << std::endl;
+    // std::cout << "ydot: ";
+    // for (int i = 0; i < NV_LENGTH_S(ydot); ++i) {
+    //     std::cout << NV_Ith_S(ydot, i) << " ";
+    // }
+    // std::cout << std::endl;
     return 0;
 }
 
 int main(int argc, char *argv[]) {
 
-    // auto props = get_properties(argv);
-    auto props = get_properties();
+    auto props = get_properties(argv);
+    // auto props = get_properties();
 
     Parameters params;
     params.props = props;
@@ -273,8 +283,8 @@ int main(int argc, char *argv[]) {
     // Problem setup
     sunrealtype t0 = 1e-6;
     sunrealtype tf = 1e6;
-    sunrealtype reltol = 1e-6;
-    sunrealtype abstol = 1e-6;
+    sunrealtype reltol = 1e-8;
+    sunrealtype abstol = 1e-20;
     sunindextype neq = 13; // number of equations
     // Cast sunindextype to int for loop usage
     int neq_int = static_cast<int>(neq);
@@ -300,7 +310,7 @@ int main(int argc, char *argv[]) {
         std::cerr << "Error in CVodeCreate" << std::endl;
         return 1;
     }
-    std::cout << "CVODE solver created successfully" << std::endl;
+    // std::cout << "CVODE solver created successfully" << std::endl;
 
     // Set user data
     int flag = CVodeSetUserData(cvode_mem, &params);
@@ -308,7 +318,7 @@ int main(int argc, char *argv[]) {
         std::cerr << "Error in CVodeSetUserData" << std::endl;
         return 1;
     }
-    std::cout << "User data set successfully" << std::endl;
+    // std::cout << "User data set successfully" << std::endl;
 
     // Initialize CVODE solver
     flag = CVodeInit(cvode_mem, rhs, t0, y);
@@ -316,36 +326,62 @@ int main(int argc, char *argv[]) {
         std::cerr << "Error in CVodeInit" << std::endl;
         return 1;
     }
-    std::cout << "CVODE solver initialized successfully" << std::endl;
+    // std::cout << "CVODE solver initialized successfully" << std::endl;
 
+    // Set max steps
+    flag = CVodeSetMaxNumSteps(cvode_mem, 100000);
+    if (flag != CV_SUCCESS) {
+        std::cerr << "Error in CVodeSetMaxNumSteps" << std::endl;
+        return 1;
+    }
+
+    // Set Stability Limit Detection
+    flag = CVodeSetStabLimDet(cvode_mem, SUNTRUE);
+    if (flag != CV_SUCCESS) {
+        std::cerr << "Error in CVodeSetStabLimDet" << std::endl;
+        return 1;
+    }
+
+    // Set minimum step size
+    flag = CVodeSetMinStep(cvode_mem, 1e-20);
+    if (flag != CV_SUCCESS) {
+        std::cerr << "Error in CVodeSetMinStep" << std::endl;
+        return 1;
+    }
+    // Set Initial Step Size
+    // flag = CVodeSetInitStep(cvode_mem, 1e-12);
+    // if (flag != CV_SUCCESS) {
+    //     std::cerr << "Error in CVodeSetInitStep" << std::endl;
+    //     return 1;
+    // }
    // Set tolerances
     flag = CVodeSStolerances(cvode_mem, reltol, abstol);
     if (flag != CV_SUCCESS) {
         std::cerr << "Error in CVodeSStolerances" << std::endl;
         return 1;
     }
-    std::cout << "Tolerances set successfully" << std::endl;
+    // std::cout << "Tolerances set successfully" << std::endl;
 
     // Create dense matrix for the Jacobian
-    // SUNMatrix A = SUNMatrix(neq, neq, sunctx);
-    // if (A == NULL) {
-    //     std::cerr << "Error creating SUNDenseMatrix" << std::endl;
-    //     return 1;
-    // }
+    SUNMatrix A = SUNDenseMatrix(neq, neq, sunctx);
+    if (A == NULL) {
+        std::cerr << "Error creating SUNDenseMatrix" << std::endl;
+        return 1;
+    }
 
     // // Create dense linear solver object
-    // SUNLinearSolver LS = SUNLinSolFree(y, A, sunctx);
-    // if (LS == NULL) {
-    //     std::cerr << "Error creating SUNLinSol_Dense" << std::endl;
-    //     return 1;
-    // }
+    SUNLinearSolver LS = SUNLinSol_Dense(y, A, sunctx);
+    if (LS == NULL) {
+        std::cerr << "Error creating SUNLinSol_Dense" << std::endl;
+        return 1;
+    }
 
     // // Attach the matrix and linear solver to CVODE
-    // flag = CVodeSetLinearSolver(cvode_mem, LS, A);
-    // if (flag != CV_SUCCESS) {
-    //     std::cerr << "Error in CVodeSetLinearSolver" << std::endl;
-    //     return 1;
-    // }
+    flag = CVodeSetLinearSolver(cvode_mem, LS, A);
+    if (flag != CV_SUCCESS) {
+        std::cerr << "Error in CVodeSetLinearSolver" << std::endl;
+        return 1;
+    }
      
 
     // Define time points
@@ -365,7 +401,9 @@ int main(int argc, char *argv[]) {
 
     // Main time-stepping loop
     std::vector<std::vector<double>> results;
-
+    // Push initial state
+    results.push_back({NV_Ith_S(y, 0), NV_Ith_S(y, 1), NV_Ith_S(y, 2), NV_Ith_S(y, 3), NV_Ith_S(y, 4), NV_Ith_S(y, 5), NV_Ith_S(y, 6), NV_Ith_S(y, 7), NV_Ith_S(y, 8), NV_Ith_S(y, 9), NV_Ith_S(y, 10), NV_Ith_S(y, 11), NV_Ith_S(y, 12)});
+    
     for (size_t i = 1; i < t_eval.size(); ++i) {
         sunrealtype tout = t_eval[i];
         flag = CVode(cvode_mem, tout, y, &t, CV_NORMAL);
@@ -380,8 +418,10 @@ int main(int argc, char *argv[]) {
         results.push_back(state);
     }
 
-    std::cout << "Integration complete" << std::endl;
+    // std::cout << "Integration complete" << std::endl;
 
+    // Set output precision to scientific notation
+    std::cout << std::scientific << std::setprecision(10);
     // Output results as a 200 x 13 matrix
     for (const auto& row : results) {
         for (const auto& val : row) {
@@ -391,7 +431,9 @@ int main(int argc, char *argv[]) {
     }
 
     // Free memory
-    N_VDestroy_Serial(y);
+    N_VDestroy(y);
+    SUNLinSolFree(LS);
+    SUNMatDestroy(A);
     CVodeFree(&cvode_mem);
     SUNContext_Free(&sunctx);
 
