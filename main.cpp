@@ -14,6 +14,7 @@
 #include <sunlinsol/sunlinsol_dense.h>   // access to dense SUNLinearSolver
 #include <sunmatrix/sunmatrix_dense.h>   // access to dense SUNMatrix
 
+#include <chrono>
 
 // Declare and define file-level constants
 const double T = 625 + 273;
@@ -404,6 +405,9 @@ int main(int argc, char *argv[]) {
     // Push initial state
     results.push_back({NV_Ith_S(y, 0), NV_Ith_S(y, 1), NV_Ith_S(y, 2), NV_Ith_S(y, 3), NV_Ith_S(y, 4), NV_Ith_S(y, 5), NV_Ith_S(y, 6), NV_Ith_S(y, 7), NV_Ith_S(y, 8), NV_Ith_S(y, 9), NV_Ith_S(y, 10), NV_Ith_S(y, 11), NV_Ith_S(y, 12)});
     
+    // using namespace std::chrono;
+    // auto start = std::chrono::high_resolution_clock::now();
+
     for (size_t i = 1; i < t_eval.size(); ++i) {
         sunrealtype tout = t_eval[i];
         flag = CVode(cvode_mem, tout, y, &t, CV_NORMAL);
@@ -417,6 +421,12 @@ int main(int argc, char *argv[]) {
         }
         results.push_back(state);
     }
+
+    // auto end = std::chrono::high_resolution_clock::now();
+    // // Calculate the duration in milliseconds
+    // std::chrono::duration<double, std::milli> duration = end - start;
+    // // Output the duration
+    // std::cout << "Time taken: " << duration.count() << " milliseconds" << std::endl;
 
     // std::cout << "Integration complete" << std::endl;
 
