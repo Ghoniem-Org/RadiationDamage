@@ -12,12 +12,34 @@ This codebase solves a system of ODEs using the [CVODE](https://sundials.readthe
     ```
     tar -xzf sundials-7.0.0.tar.gz 
     ```
-3. Use CMake to build the package. Navigate to the `build` directory inside the expanded folder and execute the following lines to build the package.
+
+## 2. Building SUNDIALS
+1.  On Linux, use CMake to build the package. Navigate to the `build` directory inside the expanded folder and execute the following lines to build the package.
     ```
     cmake ..
     make 
     sudo make install
     ```
+
+2. On Windows, make sure [Visual Studio](https://visualstudio.microsoft.com/vs/community/) and [CMake](https://cmake.org/download/) are installed.
+
+    1. Create a `build` directory inside the unzipped folder.
+    2. Open Visual Studio **as adminstrator** and open a terminal.
+    3. Cd to `build` and run:
+        ```
+        cmake-gui ..
+        ```
+        This should open a new CMake-gui window.
+    4. Specify the source path and build paths. The source path should be the unzipped folder and build path should be the `build` directory.
+    ![CMake GUI](/README%20Images/CMake-gui.png)
+    5. Click 'Configure' and click 'Generate'.
+    6. By default, the Windows OS limits the maximum path length to 260 characters. This will lead to errors in the future steps. To enable long paths, we need to make changes to the Windows registry.
+        * In the Run dialog (Win + R), type 'regedit'.
+        * Navigate to HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\FileSystem.
+        * Find the entry named 'LongPathsEnabled' and set its value to '1'.
+        * Restart the computer.
+    7. In the previously opened terminal within `build`, run `msbuild ALL_BUILD.vcxproj` followed by `msbuild INSTALL.vcxproj`
+    
 ## 2. Building the C++ Excutable
 1. (Option 1) CMake
 
