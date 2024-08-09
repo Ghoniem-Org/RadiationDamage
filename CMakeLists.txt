@@ -12,4 +12,5 @@ find_package(SUNDIALS REQUIRED)
 add_executable(main main.cpp)
 
 # Link SUNDIALS libraries
-target_link_libraries(main SUNDIALS::cvode SUNDIALS::nvecserial)
+target_link_libraries(main SUNDIALS::cvode SUNDIALS::nvecserial) 
+

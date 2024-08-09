@@ -1,4 +1,4 @@
 build/
 main2.cpp
-/.
-README Images/
+.vs/
+CMakeSettings.json

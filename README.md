@@ -39,6 +39,10 @@ This codebase solves a system of ODEs using the [CVODE](https://sundials.readthe
         * Find the entry named 'LongPathsEnabled' and set its value to '1'.
         * Restart the computer.
     7. In the previously opened terminal within `build`, run `msbuild ALL_BUILD.vcxproj` followed by `msbuild INSTALL.vcxproj`
+    8. Open `ALL_BUILD.vcxproj` located in the `build` folder. Build -> Build All.
+    9. Add the path to the installed SUNDIALS library to PATH. System Properties -> Enviornment Variables -> Click on PATH under System variables, add path to SUNDIALS.
+        ![Adding SUNDIALS to PATH](/README%20Images/sundials_path.png)
+   
     
 ## 2. Building the C++ Excutable
 1. (Option 1) CMake
