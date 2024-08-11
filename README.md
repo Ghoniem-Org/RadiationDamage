@@ -61,7 +61,7 @@ This codebase solves a system of ODEs using the [CVODE](https://sundials.readthe
     ```
 
 ## 3. Python dependencies
-In a desired Python environment, install `numpy, pandas, matplotlib`.
+In a desired Python environment, install `numpy, pandas, matplotlib, openpyxl`.
 
 <br>
 
