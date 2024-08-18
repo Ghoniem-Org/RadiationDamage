@@ -85,7 +85,7 @@ if __name__ == '__main__':
     list_of_parameters = read_data()
     
     # Solve the ODE by running c++ executable
-    result = subprocess.run(['./out/build/x64-Debug/main'] + list_of_parameters, capture_output=True, text=True)
+    result = subprocess.run(['./Build/main'] + list_of_parameters, capture_output=True, text=True)
     
     # Print the output
     print(result.stdout)
