@@ -353,13 +353,19 @@ int main(int argc, char *argv[]) {
     double t_span_end = 4e7;
     int time_points = 200;
 
+    // Define time vector in linear scale
     std::vector<double> t_eval(time_points);
-    double log_t_span_start = std::log10(t_span_start);
-    double log_t_span_end = std::log10(t_span_end);
-    double step = (log_t_span_end - log_t_span_start) / (t_eval.size() - 1);
+    double step = (t_span_end - t_span_start) / (time_points - 1);
     for (size_t i = 0; i < t_eval.size(); ++i) {
-        t_eval[i] = std::pow(10, log_t_span_start + i * step);
+        t_eval[i] = t_span_start + i * step;
     }
+    // std::vector<double> t_eval(time_points);
+    // double log_t_span_start = std::log10(t_span_start);
+    // double log_t_span_end = std::log10(t_span_end);
+    // double step = (log_t_span_end - log_t_span_start) / (t_eval.size() - 1);
+    // for (size_t i = 0; i < t_eval.size(); ++i) {
+    //     t_eval[i] = std::pow(10, log_t_span_start + i * step);
+    // }
 
     sunrealtype t = t0;
 

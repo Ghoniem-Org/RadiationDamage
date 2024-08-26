@@ -1,4 +1,5 @@
 build/
 main2.cpp
 .vs/
-CMakeSettings.json
+CMakeSettings.
+__pycache__/
