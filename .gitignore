@@ -2,3 +2,4 @@ build/
 main2.cpp
 .vs/
 CMakeSettings.json
+__pycache__/
