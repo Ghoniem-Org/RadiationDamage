@@ -27,117 +27,78 @@ const double T = 550 + 273;
 // double Ef_v;
 // double B;
 
-std::map<std::string, double> props;
+std::map<std::string, double> get_properties(int argc, char *argv[]) {
+    std::map<std::string, double> props;
 
-std::map<std::string, double> get_properties(char *argv[]) {
-// std::map<std::string, double> get_properties() {
-    // std::map<std::string, double> props;
-    // props["nu_v"] = std::stod(argv[1]);
-    // props["nu_i"] = std::stod(argv[2]);
-    // props["nu_g"] = std::stod(argv[3]);
-    // props["Em_v"] = std::stod(argv[4]);
-    // props["Em_i"] = std::stod(argv[5]);
-    // props["Em_g"] = std::stod(argv[6]);
-    // props["Eb_v_g"] = std::stod(argv[7]);
-    // props["Eb_v_2g"] = std::stod(argv[8]);
-    // props["Eb_2g"] = std::stod(argv[9]);
-    // props["Ef_v"] = std::stod(argv[10]);
-    // props["a0"] = std::stod(argv[11]);
-    // props["Omega"] = std::stod(argv[12]);
-    // props["f"] = std::stod(argv[13]);
-    // props["b"] = std::stod(argv[14]);
-    // props["k_B"] = std::stod(argv[15]);
-    // props["gamma_b"] = std::stod(argv[16]);
-    // props["B"] = std::stod(argv[17]);
-    // props["r_ppt"] = std::stod(argv[18]);
-    // props["d"] = std::stod(argv[19]);
-    // props["N_ppt"] = std::stod(argv[20]);
-    // props["rho"] = std::stod(argv[21]);
-    // props["Z_i"] = std::stod(argv[22]);
+    // Loop through all arguments
+    for (int i = 1; i < argc; ++i) {
+        std::string arg = argv[i];
+        if (arg.substr(0, 2) == "--") { // Check if argument starts with "--"
+            auto delimiter_pos = arg.find('=');
+            if (delimiter_pos != std::string::npos) {
+                std::string key = arg.substr(2, delimiter_pos - 2); // Extract the key (without "--")
+                std::string value_str = arg.substr(delimiter_pos + 1); // Extract the value as a string
 
-    // double tau_oct = 150000000.0;
-    // double b = 2e-10;
-    // double D_o = 2e-05;
-    // double SFE = 0.2;
-    // double delta = 4e-09;
-    // double sigma_o = 20000000.0;
-    // double E = 177000000000.0;
-    // double nu = 0.3;
-    // double N_p = 1.63e+16;
-    // double r_p = 4.05e-08;
-    // double k = 1.38065e-23;
-    // double Omega = 1.19e-29;
-    // double W_g = 6e-19;
-    // double a1 = 100000000000.0;
-    // double c_jog = 0.0389;
-    // double E_core = 2.0826e-19;
-    // double E_s = 4.4856e-19;
-    // double E_m = 2.2428e-19;
-    // double K_c = 10.0;
-    // double Beta = 115000.0;
-    // double xi = 1.0;
-    // double zeta = 0.425;
+                // Convert string to double
+                try {
+                    double value = std::stod(value_str);
+                    props[key] = value; // Store in the map
+                } catch (const std::invalid_argument& e) {
+                    std::cerr << "Invalid argument for " << key << ": " << value_str << std::endl;
+                    exit(1);
+                } catch (const std::out_of_range& e) {
+                    std::cerr << "Value out of range for " << key << ": " << value_str << std::endl;
+                    exit(1);
+                }
+            } else {
+                std::cerr << "Invalid argument format: " << arg << std::endl;
+                exit(1);
+            }
+        } else {
+            std::cerr << "Unexpected argument: " << arg << std::endl;
+            exit(1);
+        }
+    }
 
-    std::string tau_oct_str = argv[1];
-    std::string b_str = argv[2];
-    std::string D_o_str = argv[3];
-    std::string SFE_str = argv[4];
-    std::string delta_str = argv[5];
-    std::string sigma_o_str = argv[6];
-    std::string E_str = argv[7];
-    std::string nu_str = argv[8];
-    std::string N_p_str = argv[9];
-    std::string r_p_str = argv[10];
-    std::string k_str = argv[11];
-    std::string Omega_str = argv[12];
-    std::string W_g_str = argv[13];
-    std::string a1_str = argv[14];
-    std::string c_jog_str = argv[15];
-    std::string E_core_str = argv[16];
-    std::string E_s_str = argv[17];
-    std::string E_m_str = argv[18];
-    std::string K_c_str = argv[19];
-    std::string Beta_str = argv[20];
-    std::string xi_str = argv[21];
-    std::string zeta_str = argv[22];
-
-    double tau_oct = std::stod(tau_oct_str);
-    double b = std::stod(b_str);
-    double D_o = std::stod(D_o_str);
-    double SFE = std::stod(SFE_str);
-    double delta = std::stod(delta_str);
-    double sigma_o = std::stod(sigma_o_str);
-    double E = std::stod(E_str);
-    double nu = std::stod(nu_str);
-    double N_p = std::stod(N_p_str);
-    double r_p = std::stod(r_p_str);
-    double k = std::stod(k_str);
-    double Omega = std::stod(Omega_str);
-    double W_g = std::stod(W_g_str);
-    double a1 = std::stod(a1_str);
-    double c_jog = std::stod(c_jog_str);
-    double E_core = std::stod(E_core_str);
-    double E_s = std::stod(E_s_str);
-    double E_m = std::stod(E_m_str);
-    double K_c = std::stod(K_c_str);
-    double Beta = std::stod(Beta_str);
-    double xi = std::stod(xi_str);
-    double zeta = std::stod(zeta_str);
+    double tau_oct = props["tau_oct"];
+    double b = props["b"];
+    double D_o = props["D_o"];
+    double SFE = props["SFE"];
+    double delta = props["delta"];
+    double sigma_o = props["sigma_o"];
+    double E = props["E"];
+    double nu = props["nu"];
+    double N_p = props["N_p"];
+    double r_p = props["r_p"];
+    double k = props["k"];
+    double Omega = props["Omega"];
+    double W_g = props["W_g"];
+    double a1 = props["a1"];
+    double c_jog = props["c_jog"];
+    double E_core = props["E_core"];
+    double E_s = props["E_s"];
+    double E_m = props["E_m"];
+    double K_c = props["K_c"];
+    double Beta = props["Beta"];
+    double xi = props["xi"];
+    double zeta = props["zeta"];
+    double t0 = props["t0"];
+    double tf = props["tf"];
+    double time_points = props["time_points"];
 
     double mu = E / (2 * (1 + nu));
     double eta_v = 1e3 * 1 * c_jog * b * (SFE / (mu * b)) * (SFE / (mu * b));
     double D_p = D_o * exp(-E_core / (k * T));
     double D_v = D_o * exp(-E_m / (k * T));
     double D_s = D_o * exp(-E_s / (k * T));
+    
+    props["mu"] = mu;
+    props["eta_v"] = eta_v;
+    props["D_p"] = D_p;
+    props["D_v"] = D_v;
+    props["D_s"] = D_s;
 
-    return {
-        {"tau_oct", tau_oct}, {"b", b}, {"D_o", D_o}, {"SFE", SFE}, {"delta", delta},
-        {"sigma_o", sigma_o}, {"E", E}, {"nu", nu}, {"N_p", N_p}, {"r_p", r_p},
-        {"k", k}, {"Omega", Omega}, {"W_g", W_g}, {"a1", a1}, {"c_jog", c_jog},
-        {"E_core", E_core}, {"E_s", E_s}, {"E_m", E_m}, {"K_c", K_c}, {"Beta", Beta},
-        {"xi", xi}, {"zeta", zeta}, {"mu", mu}, {"eta_v", eta_v}, {"D_p", D_p},
-        {"D_v", D_v}, {"D_s", D_s}
-    };
+    return props;
 }
 
 // Right-hand side function
@@ -234,7 +195,7 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
 
 int main(int argc, char *argv[]) {
 
-    auto props = get_properties(argv);
+    auto props = get_properties(argc, argv);
     // auto props = get_properties();
 
     Parameters params;
@@ -245,8 +206,8 @@ int main(int argc, char *argv[]) {
     // }
 
     // Problem setup
-    sunrealtype t0 = 1e-10;
-    sunrealtype tf = 4e7;
+    sunrealtype t0 = props["t0"];
+    sunrealtype tf = props["tf"];
     sunrealtype reltol = 1e-3;
     sunrealtype abstol = 1e-6;
     sunindextype neq = 5; // number of equations
@@ -349,9 +310,9 @@ int main(int argc, char *argv[]) {
      
 
     // Define time points
-    double t_span_start = 1e-10;
-    double t_span_end = 4e7;
-    int time_points = 200;
+    double t_span_start = props["t0"];
+    double t_span_end = props["tf"];
+    int time_points = int(props["time_points"]);
 
     // Define time vector in linear scale
     std::vector<double> t_eval(time_points);
