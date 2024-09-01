@@ -5,15 +5,21 @@ import os
 import subprocess
 
 from Utilities import read_data, parse_output
-from Utilities import create_bubble_plots
+from PlotUtilities import create_bubble_plots
 
 if __name__ == '__main__':
     
     # Read the data from the Excel file
-    list_of_parameters = read_data()
+    # list_of_parameters = read_data()
+    parameters_dict = read_data()
     
+    # Convert dictionary to list of keyword arguments
+    keyword_arguments = []
+    for key, value in parameters_dict.items():
+        keyword_arguments.append(f'--{key}={value}')
+
     # Solve the ODE by running c++ executable
-    result = subprocess.run(['./build/main'] + list_of_parameters, capture_output=True, text=True)
+    result = subprocess.run(['./build/main'] + keyword_arguments, capture_output=True, text=True)
     
     # Print the output
     print(result.stdout)
