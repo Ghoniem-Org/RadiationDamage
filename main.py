@@ -10,13 +10,20 @@ from PlotUtilities import create_bubble_plots
 if __name__ == '__main__':
     
     # Read the data from the Excel file
-    # list_of_parameters = read_data()
     parameters_dict = read_data()
     
     # Convert dictionary to list of keyword arguments
     keyword_arguments = []
     for key, value in parameters_dict.items():
         keyword_arguments.append(f'--{key}={value}')
+
+    # Append time parameters
+    t0 = 1e-6
+    tf = 1e6
+    time_points = 200
+    keyword_arguments.append(f'--t0={t0}')
+    keyword_arguments.append(f'--tf={tf}')
+    keyword_arguments.append(f'--time_points={time_points}')
 
     # Solve the ODE by running c++ executable
     result = subprocess.run(['./build/main'] + keyword_arguments, capture_output=True, text=True)
@@ -33,10 +40,7 @@ if __name__ == '__main__':
     sol = parse_output(result.stdout)
     print('Parsing complete ')
 
-    # TODO: Perhalps pass time parameters as arguments to c++ executable?
     # Create bubble plots
-    t_span = (1e-6, 1e6)
-    # Time points at which to solve the ODE
-    t_eval = np.logspace(np.log10(t_span[0]), np.log10(t_span[1]), 200)
-    create_bubble_plots(t_eval, sol, t_span, fig_path = './figures', Omega=float(list_of_parameters[11]), font1=16, font2=18)
+    t_eval = np.logspace(np.log10(t0), np.log10(tf), time_points)
+    create_bubble_plots(t_eval, sol, (t0,tf), fig_path = './figures', Omega=float(parameters_dict['Omega']), font1=16, font2=18)
     print('Bubble plots created')

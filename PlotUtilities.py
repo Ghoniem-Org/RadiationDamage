@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import os
 
 class FigureGenerator:
     def __init__(self, fig_width=8, fig_height=6, xlabel='X-axis', ylabel='Y-axis',
