@@ -3,3 +3,4 @@ main2.cpp
 .vs/
 CMakeSettings.json
 __pycache__/
+.DS_Store
