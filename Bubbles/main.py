@@ -40,10 +40,6 @@ if __name__ == '__main__':
     sol = parse_output(result.stdout)
     print('Parsing complete ')
 
-    #Save results
-    np.savetxt('sol.csv', sol, delimiter=',')
-    
-
     # Create bubble plots
     t_eval = np.logspace(np.log10(t0), np.log10(tf), time_points)
     create_bubble_plots(t_eval, sol, (t0,tf), fig_path = './figures', Omega=float(parameters_dict['Omega']), font1=16, font2=18)
