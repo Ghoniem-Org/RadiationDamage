@@ -31,7 +31,9 @@ This codebase solves a system of ODEs using the [CVODE](https://sundials.readthe
         ```
         This should open a new CMake-gui window.
     4. Specify the source path and build paths. The source path should be the unzipped folder and build path should be the `build` directory.
-    ![CMake GUI](./README_Images/CMake-gui.png)
+    <div align="center">
+            <img src="./README_Images/CMake-gui.png" alt="CMake-gui">
+    </div>
     5. Click 'Configure' and click 'Generate'.
     6. By default, the Windows OS limits the maximum path length to 260 characters. This will lead to errors in the future steps. To enable long paths, we need to make changes to the Windows registry.
         * In the Run dialog (Win + R), type 'regedit'.
@@ -41,8 +43,9 @@ This codebase solves a system of ODEs using the [CVODE](https://sundials.readthe
     7. In the previously opened terminal within `build`, run `msbuild ALL_BUILD.vcxproj` followed by `msbuild INSTALL.vcxproj`
     8. Open `ALL_BUILD.vcxproj` located in the `build` folder. Build -> Build All.
     9. Add the path to the installed SUNDIALS library to PATH. System Properties -> Enviornment Variables -> Click on PATH under System variables, add path to SUNDIALS.
-        ![Adding SUNDIALS to PATH](./README_Images/sundials_path.png)
-   
+    <div align="center">
+        <img src="./README_Images/sundials_path.png" alt="sundials_path">
+    </div> 
     
 ## 2. Building the C++ Excutable
 1. (Option 1) CMake

@@ -31,7 +31,9 @@ This codebase solves a system of ODEs using the [CVODE](https://sundials.readthe
         ```
         This should open a new CMake-gui window.
     4. Specify the source path and build paths. The source path should be the unzipped folder and build path should be the `build` directory.
-    ![CMake GUI](./README_Images/CMake-gui.png)
+    <div align="center">
+        <img src="./README_Images/CMake-gui.png" alt="CMake-gui">
+    </div>
     5. Click 'Configure' and click 'Generate'.
     6. By default, the Windows OS limits the maximum path length to 260 characters. This will lead to errors in the future steps. To enable long paths, we need to make changes to the Windows registry.
         * In the Run dialog (Win + R), type 'regedit'.
@@ -41,8 +43,9 @@ This codebase solves a system of ODEs using the [CVODE](https://sundials.readthe
     7. In the previously opened terminal within `build`, run `msbuild ALL_BUILD.vcxproj` followed by `msbuild INSTALL.vcxproj`
     8. Open `ALL_BUILD.vcxproj` located in the `build` folder. Build -> Build All.
     9. Add the path to the installed SUNDIALS library to PATH. System Properties -> Enviornment Variables -> Click on PATH under System variables, add path to SUNDIALS.
-        ![Adding SUNDIALS to PATH](./README_Images/sundials_path.png)
-   
+    <div align="center">
+        <img src="./README_Images/sundials_path.png" alt="sundials_path">
+    </div>   
     
 ## 2. Building the C++ Excutable
 1. (Option 1) CMake
@@ -67,18 +70,27 @@ In a desired Python environment, install `numpy, pandas, matplotlib, openpyxl`.
 1. Download SRIM-2013 from the [official website](http://www.srim.org/SRIM/SRIMLEGL.htm). 
 
 2. Create a new directory named `SRIM-2013`
-![SRIM directory](./README_Images/SRIM-2013_directory.png)
+<div align="center">
+    <img src="./README_Images/SRIM-2013_directory.png" alt="SRIM 2013_directory">
+</div>
+
 
 3. Move the previously downloaded `.e` file to the new directory and rename the file to `SRIM-2013.exe`.
 
 4. Double click on the .exe file to begin extraction. Click `Extract` then `Done`.
-![SRIM exe](./README_Images/srim_exe.png)
+<div align="center">
+    <img src="./README_Images/srim_exe.png" alt="SRIM exe">
+</div>
 
 5. If installing SRIM for the first time, go to the `SRIM-Setup` directory. There should be a file named `_SRIM-Setup (Right-Click).bat`. Right click on this file and Run as Admistrator.
-![SRIM setup](./README_Images/srim_setup.png)
+<div align="center">
+    <img src="./README_Images/srim_setup.png" alt="SRIM setup">
+</div>
 
 6. Follow onscreen instruction displayed on the Command Window.
-![Command window](./README_Images/command_window.png)
+<div align="center">
+    <img src="./README_Images/command_window.png" alt="Command window">
+</div>
 
 ## 5. Installing SRIM on Ubuntu
 
@@ -93,24 +105,16 @@ In a desired Python environment, install `numpy, pandas, matplotlib, openpyxl`.
     ```
 
 4. To verify installation, we will run a tutorial jupyter notebook. Open the following notebook
-![Notebook](./README_Images/notebook.png)
-<br>
+<div align="center">
+    <img src="./README_Images/notebook.png" alt="notebook">
+</div>
 
 5. The path to the SRIM executable must be specified. This can be found in the second code cell.
-![srim path](./README_Images/tutorial_srim_path.png)
+<div align="center">
+    <img src="./README_Images/tutorial_srim_path.png" alt="tutorial_srim_path">
+</div>
 
 6. If everything has been installed correctly, we should see a pop-up TRIM window when executable the second code cell of the tutorial.
-
-
-# Running the ODE Solver
-1. Run the main script in the correct Python environment. This calls the c++ excutable named `main` under `build`. Data is passed as a command line argument when calling the subprocess.
-    ```
-    python main.py
-    ```
-2. `./main_time` is a standalone exectuable with hardcoded loaded data.
-    ```
-    ./main_time
-    ```
 
 # Running the ODE Solver with Spatial Nodes
 1. Run the main script in the correct Python environment. This calls the c++ excutable named `main_spatial` under `build`. Data is passed as a command line argument when calling the subprocess.
