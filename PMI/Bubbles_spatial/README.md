@@ -57,11 +57,50 @@ This codebase solves a system of ODEs using the [CVODE](https://sundials.readthe
 
     Alternatively, you can build the executable using g++:
     ```
-    g++ main.cpp -o main -lsundials_cvode -lsundials_nvecserial -lsundials_core
+    g++ main_spatial.cpp -o main -lsundials_cvode -lsundials_nvecserial -lsundials_core
     ```
 
 ## 3. Python dependencies
 In a desired Python environment, install `numpy, pandas, matplotlib, openpyxl`.
+
+## 4. Installing SRIM on Windows
+1. Download SRIM-2013 from the [official website](http://www.srim.org/SRIM/SRIMLEGL.htm). 
+
+2. Create a new directory named `SRIM-2013`
+![SRIM directory](./README_Images/SRIM-2013_directory.png)
+
+3. Move the previously downloaded `.e` file to the new directory and rename the file to `SRIM-2013.exe`.
+
+4. Double click on the .exe file to begin extraction. Click `Extract` then `Done`.
+![SRIM exe](./README_Images/srim_exe.png)
+
+5. If installing SRIM for the first time, go to the `SRIM-Setup` directory. There should be a file named `_SRIM-Setup (Right-Click).bat`. Right click on this file and Run as Admistrator.
+![SRIM setup](./README_Images/srim_setup.png)
+
+6. Follow onscreen instruction displayed on the Command Window.
+![Command window](./README_Images/command_window.png)
+
+## 5. Installing SRIM on Ubuntu
+
+## 6. Installing pysrim
+1. Go to the pysrim repository [website](https://gitlab.com/costrouc/pysrim/-/tree/master), and download the repository as a `.zip` file.
+
+2. Extract the `.zip` file.
+
+3. In the root directory of the repository `pysrim-master`, execute the following command:
+    ```
+    pip install .
+    ```
+
+4. To verify installation, we will run a tutorial jupyter notebook. Open the following notebook
+![Notebook](./README_Images/notebook.png)
+<br>
+
+5. The path to the SRIM executable must be specified. This can be found in the second code cell.
+![srim path](./README_Images/tutorial_srim_path.png)
+
+6. If everything has been installed correctly, we should see a pop-up TRIM window when executable the second code cell of the tutorial.
+
 
 # Running the ODE Solver
 1. Run the main script in the correct Python environment. This calls the c++ excutable named `main` under `build`. Data is passed as a command line argument when calling the subprocess.
@@ -73,10 +112,16 @@ In a desired Python environment, install `numpy, pandas, matplotlib, openpyxl`.
     ./main_time
     ```
 
-3. Code Walkthrough
+# Running the ODE Solver with Spatial Nodes
+1. Run the main script in the correct Python environment. This calls the c++ excutable named `main_spatial` under `build`. Data is passed as a command line argument when calling the subprocess.
+    ```
+    python main_spatial.py
+    ```
 
-# Results
+2. Code Walkthrough
+
+<!-- # Results
 Runtime comparisons between original Python code (scipy odeint) vs. C++ (SUNDIALS) with controlled absolute, relative tolerances.
 > **C++**: 75.3078 ms
 >
-> **Python**:  361.270 ms
+> **Python**:  361.270 ms -->
