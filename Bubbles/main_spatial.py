@@ -4,11 +4,12 @@ import pandas as pd
 import os
 import subprocess
 
-from Utilities import read_data, parse_output
-from PlotUtilities import create_bubble_plots
+from Utilities import read_data, parse_output_spatial
+# from PlotUtilities import create_bubble_plots
 
 if __name__ == '__main__':
     
+    # 
     # Read the data from the Excel file
     parameters_dict = read_data()
     
@@ -26,7 +27,8 @@ if __name__ == '__main__':
     keyword_arguments.append(f'--time_points={time_points}')
 
     # Solve the ODE by running c++ executable
-    result = subprocess.run(['./build/main'] + keyword_arguments, capture_output=True, text=True)
+    # result = subprocess.run(['./build/main_spatial'] + keyword_arguments, capture_output=True, text=True)
+    result = subprocess.run(['./build/main_spatial'], capture_output=True, text=True)
     
     # Print the output
     print(result.stdout)
@@ -37,10 +39,10 @@ if __name__ == '__main__':
         print(result.stderr)
         exit(1)
     
-    sol = parse_output(result.stdout)
+    sol, times = parse_output_spatial(result.stdout, 100, 13, time_points, excel_filename="results_spatial.xlsx")
     print('Parsing complete ')
 
-    # Create bubble plots
-    t_eval = np.logspace(np.log10(t0), np.log10(tf), time_points)
-    create_bubble_plots(t_eval, sol, (t0,tf), fig_path = './figures', Omega=float(parameters_dict['Omega']), font1=16, font2=18)
-    print('Bubble plots created')
+    # # Create bubble plots
+    # t_eval = np.logspace(np.log10(t0), np.log10(tf), time_points)
+    # create_bubble_plots(t_eval, sol, (t0,tf), fig_path = './figures', Omega=float(parameters_dict['Omega']), font1=16, font2=18)
+    # print('Bubble plots created')

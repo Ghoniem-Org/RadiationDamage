@@ -1,6 +1,6 @@
-build/
-main2.cpp
-.vs/
-CMakeSettings.json
-__pycache__/
-.DS_Store
+Bubbles/build/
+Bubbles/main2.cpp
+Bubbles/.vs/
+Bubbles/CMakeSettings.json
+Bubbles/__pycache__/
+Bubbles/.DS_Store

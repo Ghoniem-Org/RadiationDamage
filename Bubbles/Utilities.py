@@ -81,4 +81,83 @@ def parse_output(output):
     data = [list(map(float, line.strip().split())) for line in lines]
     return np.array(data)
 
+import numpy as np
+import pandas as pd
+
+def parse_output_spatial(stdout_str, Nx, Ns, num_time_points, excel_filename="results.xlsx"):
+    """
+    Parse the stdout from the C++ code into a NumPy array and save results to an Excel file.
+
+    Parameters
+    ----------
+    stdout_str : str
+        The combined stdout from the C++ executable.
+    Nx : int
+        Number of spatial nodes.
+    Ns : int
+        Number of species.
+    num_time_points : int
+        Number of time points (including the initial condition).
+    excel_filename : str
+        Name of the Excel file to write sheets to.
+
+    Returns
+    -------
+    sol : np.ndarray
+        Array with shape (num_time_points, Ns, Nx).
+    times : list of float
+        List of time values corresponding to each slice in `sol`.
+    """
+    lines = stdout_str.strip().splitlines()
+    idx_line = 0
+    num_lines = len(lines)
+
+    # Containers to accumulate time values and data blocks
+    times = []
+    data_blocks = []
+
+    # Loop to parse output
+    while idx_line < num_lines:
+        line = lines[idx_line].strip()
+
+        if line.startswith("Time:"):
+            # Extract the timestamp
+            parts = line.split()
+            t_val = float(parts[1])  # Extract timestamp as float
+            times.append(t_val)
+            idx_line += 1  # Move to the next line after "Time:"
+
+            # Read the next Nx lines as data for this timestamp
+            block_lines = lines[idx_line : idx_line + Nx]
+            idx_line += Nx
+
+            block_matrix = []
+            for bl in block_lines:
+                cols = bl.strip().split()
+                float_cols = list(map(float, cols))
+                block_matrix.append(float_cols)
+            block_matrix = np.array(block_matrix).T  # shape (Ns, Nx)
+            data_blocks.append(block_matrix)
+
+        else:
+            # Skip lines not starting with "Time:" (e.g., header/debug info)
+            idx_line += 1
+
+    # Ensure we have the expected number of time points
+    if len(data_blocks) != num_time_points:
+        raise ValueError(
+            f"Expected {num_time_points} time points, but parsed {len(data_blocks)}."
+        )
+
+    # Stack all data blocks into shape (num_time_points, Ns, Nx)
+    sol = np.stack(data_blocks, axis=0)  # shape: (num_time_points, Ns, Nx)
+
+    # Write results to Excel
+    with pd.ExcelWriter(excel_filename) as writer:
+        for i, t_val in enumerate(times):
+            df = pd.DataFrame(data_blocks[i])
+            sheet_name = f"{t_val:.6e}"  # Use the exact timestamp as the sheet name
+            df.to_excel(writer, sheet_name=sheet_name, index=False, header=False)
+
+    return sol, times
 
