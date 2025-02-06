@@ -56,6 +56,7 @@ This codebase solves a system of ODEs using the [CVODE](https://sundials.readthe
     cmake ..
     make
     ```
+    On Windows, use `cmake --build .` instead of `make`.
 2. (Option 2) g++
 
     Alternatively, you can build the executable using g++:
