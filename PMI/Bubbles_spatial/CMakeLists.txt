@@ -9,8 +9,10 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(SUNDIALS REQUIRED)
 
 # Add the executable
-add_executable(main_spatial main_spatial.cpp)
+# add_executable(main_spatial main_spatial.cpp)
+add_executable(main_spatial_from_curve main_spatial_from_curve.cpp)
 
 # Link SUNDIALS libraries
-target_link_libraries(main_spatial SUNDIALS::cvode SUNDIALS::nvecserial) 
+# target_link_libraries(main_spatial SUNDIALS::cvode SUNDIALS::nvecserial) 
+target_link_libraries(main_spatial_from_curve SUNDIALS::cvode SUNDIALS::nvecserial) 
 

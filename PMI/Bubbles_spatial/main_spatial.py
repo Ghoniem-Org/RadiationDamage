@@ -28,7 +28,7 @@ if __name__ == '__main__':
 
     # Solve the ODE by running c++ executable
     # result = subprocess.run(['./build/main_spatial'] + keyword_arguments, capture_output=True, text=True)
-    result = subprocess.run(['./build/main_spatial'], capture_output=True, text=True)
+    result = subprocess.run(['./build/Debug/main_spatial_from_curve'], capture_output=True, text=True)
     
     # Print the output
     print(result.stdout)
@@ -39,7 +39,7 @@ if __name__ == '__main__':
         print(result.stderr)
         exit(1)
     
-    sol, times = parse_output_spatial(result.stdout, 100, 13, time_points, excel_filename="results_spatial.xlsx")
+    sol, times = parse_output_spatial(result.stdout, 20, 13, time_points, excel_filename="results_spatial.xlsx")
     print('Parsing complete ')
 
     # # Create bubble plots

@@ -146,9 +146,9 @@ std::map<std::string, double> get_properties() {
     double C_ppt = N_ppt * Omega;
 
     // Production terms
-    double P = f * G; //Fuction of space
+    // double P = f * G; //Fuction of space
     double delta = b * G;
-    double G_He = he_2_dpa * G; //Fuction of space
+    // double G_He = he_2_dpa * G; //Fuction of space
 
     // Populate the map with calculated properties
     props["alpha"] = alpha;
@@ -162,8 +162,8 @@ std::map<std::string, double> get_properties() {
     props["D_i"] = D_i;
     props["D_v"] = D_v;
     props["D_g"] = D_g;
-    props["P"] = P;
-    props["G_He"] = G_He;
+    // props["P"] = P;
+    // props["G_He"] = G_He;
     props["C_v_e"] = C_v_e;
     props["C_ppt"] = C_ppt;
     props["rho"] = rho;
@@ -219,16 +219,17 @@ static double compute_L(/* species, x, etc. */) {
 }
 
 // User data structure
+// changed here:
 struct Parameters {
     std::map<std::string, double> props;
     int Nx;
     int Ns;
     double x0;
     double xN;
-    // If you have species-specific diffusion coefficients, store them here
-    // For simplicity, assume a single diffusion coefficient per species from props
-    // Or just one D if uniform for all species.
+    std::vector<double> P;
+    std::vector<double> G_He;
 };
+
 
 // RHS function
 int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
@@ -250,8 +251,9 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
     double e4 = props["e4"];
     double e5 = props["e5"];
     double delta = props["delta"];
-    double P = props["P"];
-    double G_He = props["G_He"];
+    // Changed here
+    const std::vector<double>& P = params->P;
+    const std::vector<double>& G_He = params->G_He;
     double Omega = props["Omega"];
     double C_ppt = props["C_ppt"];
     double rho = props["rho"];
@@ -375,21 +377,21 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
                 // dC_v/dt
                 // = P + (beta*e1 + delta)*C_gv_val
                 //   - (alpha*C_i_val + beta*C_g_val + gamma_val*(C_s_v + C_gv_val + 2*(C_2g_val + C_2gv_val) + 3*C_star_val))*C_v_val
-                val = P + (beta*e1+delta)*C_gv_val 
+                val = P[j] + (beta*e1+delta)*C_gv_val 
                       - (alpha*C_i_val + beta*C_g_val + gamma_val*(C_s_v + C_gv_val + 2*(C_2g_val + C_2gv_val) + 3*C_star_val))*C_v_val;
                 // Add diffusion:
                 val += D_array[i]*d2Cdx2;
             } else if (i == 1) {
                 // dC_i/dt
                 // = P - alpha*(C_v_val + C_gv_val + 2*C_2gv_val + 3*C_star_val + C_s_i)*C_i_val
-                val = P - alpha*(C_v_val + C_gv_val + 2*C_2gv_val + 3*C_star_val + C_s_i)*C_i_val;
+                val = P[j] - alpha*(C_v_val + C_gv_val + 2*C_2gv_val + 3*C_star_val + C_s_i)*C_i_val;
                 val += D_array[i]*d2Cdx2;
             } else if (i == 2) {
                 // dC_g/dt
                 // = (G_He - beta*C_g_val*(C_v_val + 2*C_g_val + C_gv_val + 2*C_2g_val + 2*C_2gv_val + C_gb_val_local + epsilon*C_b_val)
                 //    + delta*(C_gv_val + 2*C_2gv_val + 4*C_2g_val + 3*C_star_val + m_val*C_b_val + M_gb_val + m_ppt_val*C_ppt)
                 //    + alpha*C_i_val*C_gv_val + beta*(e1*C_gv_val + e2*C_2gv_val))
-                val = (G_He - beta*C_g_val*(C_v_val + 2*C_g_val + C_gv_val + 2*C_2g_val + 2*C_2gv_val + C_gb_val_local + epsilon*C_b_val)
+                val = (G_He[j] - beta*C_g_val*(C_v_val + 2*C_g_val + C_gv_val + 2*C_2g_val + 2*C_2gv_val + C_gb_val_local + epsilon*C_b_val)
                        + delta*(C_gv_val + 2*C_2gv_val + 4*C_2g_val + 3*C_star_val + m_val*C_b_val + M_gb_val + m_ppt_val*C_ppt)
                        + alpha*C_i_val*C_gv_val + beta*(e1*C_gv_val + e2*C_2gv_val));
                 val += D_array[i]*d2Cdx2;
@@ -480,9 +482,33 @@ int main(int argc, char *argv[]) {
     Parameters params;
     params.props = props;
     params.Ns = 13; // 13 species
-    params.Nx = 100; // 100 spatial nodes
+    params.Nx = 20; // 100 spatial nodes
     params.x0 = 0.0;
     params.xN = 1.0;
+
+    params.P.resize(params.Nx);
+    params.G_He.resize(params.Nx);
+
+    // Changed here
+    const double x_max = 1e-7;  // 1000 Å in meters
+    const double dx = x_max / (params.Nx - 1);  // Spatial step size
+
+    // Given coefficients for P(x) and G_He(x)
+    const double A_P = 6.05e-4;
+    const double B_P = 1.01;
+    const double C_P = 7.78e-3;
+
+    const double A_G = 2.00;
+    const double B_G = 0.68;
+    const double C_G = 6.80e-3;
+
+    for (int j = 0; j < params.Nx; j++) {
+        double x = j * dx;  // Convert index to physical distance
+
+        // Compute spatially varying P(x) and G_He(x)
+        params.P[j] = A_P * pow(x, B_P) * exp(-C_P * x);
+        params.G_He[j] = A_G * pow(x, B_G) * exp(-C_G * x);
+    }
 
     // ODE system size
     sunindextype Nx = params.Nx;
@@ -493,6 +519,8 @@ int main(int argc, char *argv[]) {
     double tf = props["tf"];
     double reltol = 1e-8;
     double abstol = 1e-20;
+
+   
 
     SUNContext sunctx;
     SUNContext_Create(NULL, &sunctx);
