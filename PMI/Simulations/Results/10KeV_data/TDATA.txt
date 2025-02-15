@@ -20,13 +20,13 @@ Target energies for target atom =  W
 ====================================================================
 Depth Range of Tabulated Data=  000000.E+00  -  100000.E-02  Angstroms
 ====================================================================
-Total Ions calculated =  004999
-Average Range         =   32807.E-02 Angstroms
-Average Straggling    =   17771.E-02 Angstroms
-Average Vacancy/Ion   =   10191.E-03
+Total Ions calculated =  005000
+Average Range         =   33309.E-02 Angstroms
+Average Straggling    =   17246.E-02 Angstroms
+Average Vacancy/Ion   =   10245.E-03
 ====================================================================
-Total Backscattered Ions=  1269 
-Total Transmitted Ions  =  2 
+Total Backscattered Ions=  1283 
+Total Transmitted Ions  =  1 
 ====================================================================
 See files SRIM Outputs\*.txt for tables :
    TDATA.txt    -- Details of the calculation.
