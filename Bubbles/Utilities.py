@@ -4,7 +4,8 @@ import os
 
 def read_data():
     # Load the Excel file
-    df_steel = pd.read_excel('material_data.xlsx', sheet_name='steel', engine='openpyxl')
+    data_file = r'.\Bubbles\material_data.xlsx'
+    df_steel = pd.read_excel(data_file, sheet_name='steel', engine='openpyxl')
 
     # Convert the DataFrame to a dictionary
     # Assuming 'key' and 'value' are column names in your Excel file

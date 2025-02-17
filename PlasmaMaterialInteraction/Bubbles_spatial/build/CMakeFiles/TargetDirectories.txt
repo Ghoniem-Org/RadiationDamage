@@ -1,0 +1,3 @@
+C:/Users/Owner/Documents/Repos/RadiationDamage/PMI/Bubbles_spatial/build/CMakeFiles/main_spatial_from_curve.dir
+C:/Users/Owner/Documents/Repos/RadiationDamage/PMI/Bubbles_spatial/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/Owner/Documents/Repos/RadiationDamage/PMI/Bubbles_spatial/build/CMakeFiles/ZERO_CHECK.dir

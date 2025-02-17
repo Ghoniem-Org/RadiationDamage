@@ -1,0 +1,10 @@
+^C:\USERS\OWNER\DOCUMENTS\REPOS\RADIATIONDAMAGE\BUBBLES\BUILD\CMAKEFILES\D04CE0F7E1A6F61D8B6A06288A4D628E\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Users/Owner/Documents/Repos/RadiationDamage/Bubbles -BC:/Users/Owner/Documents/Repos/RadiationDamage/Bubbles/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Users/Owner/Documents/Repos/RadiationDamage/Bubbles/build/ode_solver.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

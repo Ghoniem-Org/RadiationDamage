@@ -1,12 +1,10 @@
-Bubbles/build/
-Bubbles/main2.cpp
-Bubbles/.vs/
+
 Bubbles/CMakeSettings.json
 Bubbles/__pycache__/
 Bubbles/.vscode/
 Bubbles/.DS_Store
-PMI/Bubbles_spatial/build/
-PMI/Bubbles_spatial/__pycache__
-PMI/Bubbles_spatial/.vs/
+PlasmaMaterialInteraction/Bubbles_spatial/__pycache__
+PPlasmaMaterialInteraction/Bubbles_spatial/.vs/
 .vs/
 .vscode/
+__pycache__/

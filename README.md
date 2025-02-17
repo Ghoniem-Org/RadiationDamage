@@ -7,8 +7,8 @@ Comprehensive repository for solving a system of ODEs for the Radiation Damage p
 `Creep`
 : Contains cpp code for solving the Creep ODEs with using Sundials.
 
-`PMI`
+`PlasmaMataerialInteraction`
 : Contains cpp code for solving the Bubbles ODEs with spatial dimensions with using Sundials. Includes simulation results from SRIM. Refer to README inside `Bubbles_spatial` for details.
 
-`Old`
+`PythonValidation`
 : Legacy code for solving the Bubbles, Creep ODEs with matlab and python.

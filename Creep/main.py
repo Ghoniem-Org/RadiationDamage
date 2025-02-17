@@ -26,7 +26,7 @@ if __name__ == '__main__':
     keyword_arguments.append(f'--time_points={time_points}')
     
     # Solve the ODE by running c++ executable
-    result = subprocess.run(['./build/main'] + keyword_arguments, capture_output=True, text=True)
+    result = subprocess.run(['./build/Debug/main'] + keyword_arguments, capture_output=True, text=True)
     
     # Print the output
     print(result.stdout)

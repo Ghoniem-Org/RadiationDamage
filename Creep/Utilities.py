@@ -2,8 +2,8 @@ import pandas as pd
 import numpy as np
 
 def read_data():
-    # Load the Excel file
-    df_steel = pd.read_excel('material_data.xlsx', sheet_name='steel', engine='openpyxl')
+    # Load C:\Users\Owner\Documents\Repos\RadiationDamage\Creep\material_data.xlsxthe Excel file
+    df_steel = pd.read_excel(r'./material_data.xlsx', sheet_name='steel', engine='openpyxl')
 
     # List of parameter names you want to extract
     input_data = ['tau_oct', 'b', 'D_o', 'SFE', 'delta', 'sigma_o', 'E', 
