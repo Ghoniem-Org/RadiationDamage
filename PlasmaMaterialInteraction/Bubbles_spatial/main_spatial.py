@@ -28,9 +28,11 @@ if __name__ == '__main__':
 
     # Solve the ODE by running c++ executable
     # result = subprocess.run(['./build/main_spatial'] + keyword_arguments, capture_output=True, text=True)
-    result = subprocess.run(['./build/Debug/main_spatial_from_curve'], capture_output=True, text=True)
-    
-    # Print the output
+    import subprocess
+    excutable_path = r'C:\Users\Owner\Documents\Repos\RadiationDamage\PlasmaMaterialInteraction\Bubbles_spatial\build\Debug\main_spatial_from_curve.exe'
+    result = subprocess.run([excutable_path] + keyword_arguments, capture_output=True, text=True)
+
+    # Print output
     print(result.stdout)
 
     # Check for errors
