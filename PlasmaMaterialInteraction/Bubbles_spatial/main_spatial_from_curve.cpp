@@ -21,80 +21,75 @@ inline int idx(int i, int j, int Ns, int Nx) {
     return j*Ns + i;
 }
 
-// Declare and define file-level constants
-const double T = 625 + 273;
-const double G = 3e-3;
-const double he_2_dpa = 5e-6;
+// // Declare and define file-level constants
+// const double T = 625 + 273;
+// // const double T = 300;
+// const double G = 3e-3;
+// const double he_2_dpa = 5e-6;
 
 // Forward declarations for functions to get properties
-// std::map<std::string, double> get_properties(int argc, char *argv[]) {
-std::map<std::string, double> get_properties() {
+std::map<std::string, double> get_properties(int argc, char *argv[]) {
+// std::map<std::string, double> get_properties() {
 
     std::map<std::string, double> props;
-    // Same logic as in original code for parsing parameters
-    // ...
-    // This is a placeholder; insert the original implementation here
-    // Ensure that alpha, beta, gamma, e1, e2, e4, e5, etc. are computed.
-    // Also ensure t0, tf, time_points are set.
-    // D_i, D_v, D_g must be in props as well.
 
     // // Loop through all arguments
-    // for (int i = 1; i < argc; ++i) {
-    //     std::string arg = argv[i];
-    //     if (arg.substr(0, 2) == "--") { // Check if argument starts with "--"
-    //         auto delimiter_pos = arg.find('=');
-    //         if (delimiter_pos != std::string::npos) {
-    //             std::string key = arg.substr(2, delimiter_pos - 2); // Extract the key (without "--")
-    //             std::string value_str = arg.substr(delimiter_pos + 1); // Extract the value as a string
+    for (int i = 1; i < argc; ++i) {
+        std::string arg = argv[i];
+        if (arg.substr(0, 2) == "--") { // Check if argument starts with "--"
+            auto delimiter_pos = arg.find('=');
+            if (delimiter_pos != std::string::npos) {
+                std::string key = arg.substr(2, delimiter_pos - 2); // Extract the key (without "--")
+                std::string value_str = arg.substr(delimiter_pos + 1); // Extract the value as a string
 
-    //             // Convert string to double
-    //             try {
-    //                 double value = std::stod(value_str);
-    //                 props[key] = value; // Store in the map
-    //             } catch (const std::invalid_argument& e) {
-    //                 std::cerr << "Invalid argument for " << key << ": " << value_str << std::endl;
-    //                 exit(1);
-    //             } catch (const std::out_of_range& e) {
-    //                 std::cerr << "Value out of range for " << key << ": " << value_str << std::endl;
-    //                 exit(1);
-    //             }
-    //         } else {
-    //             std::cerr << "Invalid argument format: " << arg << std::endl;
-    //             exit(1);
-    //         }
-    //     } else {
-    //         std::cerr << "Unexpected argument: " << arg << std::endl;
-    //         exit(1);
-    //     }
-    // }
+                // Convert string to double
+                try {
+                    double value = std::stod(value_str);
+                    props[key] = value; // Store in the map
+                } catch (const std::invalid_argument& e) {
+                    std::cerr << "Invalid argument for " << key << ": " << value_str << std::endl;
+                    exit(1);
+                } catch (const std::out_of_range& e) {
+                    std::cerr << "Value out of range for " << key << ": " << value_str << std::endl;
+                    exit(1);
+                }
+            } else {
+                std::cerr << "Invalid argument format: " << arg << std::endl;
+                exit(1);
+            }
+        } else {
+            std::cerr << "Unexpected argument: " << arg << std::endl;
+            exit(1);
+        }
+    }
 
     // Comment when using command line arguments
-    props["nu_v"] = 5000000000000;
-    props["nu_i"] = 50000000000000;
-    props["nu_g"] = 50000000000000;
-    props["Em_v"] = 1.4;
-    props["Em_i"] = 0.2;
-    props["Em_g"] = 0.2;
-    props["Eb_v_g"] = 2.4;
-    props["Eb_v_2g"] = 3.5;
-    props["Eb_2g"] = 0.79;
-    props["Ef_v"] = 1.6;
-    props["a0"] = 3.63e-10;
-    props["Omega"] = 1.195803675E-029;
-    props["f"] = 1e-1;
-    props["b"] = 10;
-    props["k_B"] = 8.617e-5;
-    props["gamma_b"] = 6.24e18;
-    props["B"] = 1.75e-29;
-    props["r_ppt"] = 1e-8;
-    props["d"] = 3e-5;
-    props["N_ppt"] = 1e16;
-    props["rho"] = 300000000000000;
-    props["Z_i"] = 1.2;
+    // props["nu_v"] = 5000000000000;
+    // props["nu_i"] = 50000000000000;
+    // props["nu_g"] = 50000000000000;
+    // props["Em_v"] = 1.4;
+    // props["Em_i"] = 0.2;
+    // props["Em_g"] = 0.2;
+    // props["Eb_v_g"] = 2.4;
+    // props["Eb_v_2g"] = 3.5;
+    // props["Eb_2g"] = 0.79;
+    // props["Ef_v"] = 1.6;
+    // props["a0"] = 3.63e-10;
+    // props["Omega"] = 1.195803675E-029;
+    // props["f"] = 1e-1;
+    // props["b"] = 10;
+    // props["k_B"] = 8.617e-5;
+    // props["gamma_b"] = 6.24e18;
+    // props["B"] = 1.75e-29;
+    // props["r_ppt"] = 1e-8;
+    // props["d"] = 3e-5;
+    // props["N_ppt"] = 1e16;
+    // props["rho"] = 300000000000000;
+    // props["Z_i"] = 1.2;
     
-    props["t0"] = 1e-6;
-    props["tf"] = 1e6;
-    props["time_points"] = 200;
+    // props["t0"] = 1e-6;
+    // props["tf"] = 1e6;
+    // props["time_points"] = 200;
 
     // Retrieve parameters from props map or use default values
     double nu_v = props["nu_v"];
@@ -120,16 +115,30 @@ std::map<std::string, double> get_properties() {
     double rho = props["rho"];
     double Z_i = props["Z_i"];
 
-    // New parameters for time
+    // Parameters from parameters.txt
     double t0 = props["t0"];
     double tf = props["tf"];
     double time_points = props["time_points"];
+    double spatial_nodes = props["spatial_nodes"];
+    double xN = props["xN"];
+    double A_P = props["A_P"];
+    double B_P = props["B_P"];
+    double C_P = props["C_P"];
+    double A_G = props["A_G"];
+    double B_G = props["B_G"];
+    double C_G = props["C_G"];
+    double T = props["T"];
+    double G = props["G"];
+    double he_2_dpa = props["he_2_dpa"];
 
     // Reaction frequencies
     double alpha = 48 * nu_i * exp(-Em_i / (k_B * T));
     double beta = 48 * nu_g * exp(-Em_g / (k_B * T));
     double gamma = 48 * nu_v * exp(-Em_v / (k_B * T));
 
+    // double alpha = 48 * nu_i * exp(-Em_i / k_B * T);
+    // double beta = 48 * nu_g * exp(-Em_g / k_B * T);
+    // double gamma = 48 * nu_v * exp(-Em_v / k_B * T);
     // Thermal emission frequencies
     double e1 = exp(-Eb_v_g / (k_B * T));
     double e2 = exp(-Eb_v_2g / (k_B * T));
@@ -179,6 +188,14 @@ std::map<std::string, double> get_properties() {
     props["t0"] = t0;
     props["tf"] = tf;
     props["time_points"] = time_points;
+    props["spatial_nodes"] = spatial_nodes;
+    props["xN"] = xN;
+    props["A_P"] = A_P;
+    props["B_P"] = B_P;
+    props["C_P"] = C_P;
+    props["A_G"] = A_G;
+    props["B_G"] = B_G;
+    props["C_G"] = C_G;
 
     return props;
 }
@@ -293,21 +310,29 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
     double D_g = props["D_g"]; // for helium maybe
     // For other species, set D=0 if they don't diffuse or if not defined.
     // This is problem-dependent. We will just demonstrate a scenario:
-    double D_array[13];
+    // double D_array[13];
     // Assign diffusion coefficients to species:
     // This is an assumption:
-    D_array[0] = D_v; // C_v
-    D_array[1] = D_i; // C_i
-    D_array[2] = D_g; // C_g
-    // For others, assume no diffusion:
-    for (int i = 3; i < 13; i++) D_array[i] = 0.0;
+    // D_array[0] = D_v; // C_v
+    // D_array[1] = D_i; // C_i
+    // D_array[2] = D_g; // C_g
+    // // For others, assume no diffusion:
+    // for (int i = 3; i < 13; i++) D_array[i] = 0.0;
+
+    // Prevents time evolution at boundaries
+    for (int i = 0; i < Ns; i++) {
+        // NV_Ith_S(y, idx(i,0,Ns,Nx)) = 0.0;
+        // NV_Ith_S(y, idx(i,Nx - 1,Ns,Nx)) = 0.0;
+        NV_Ith_S(ydot, idx(i,0,Ns,Nx)) = 0.0;
+        NV_Ith_S(ydot, idx(i,Nx - 1,Ns,Nx)) = 0.0;
+    }
 
     // Compute derivatives
-    for (int j = 0; j < Nx; j++) {
+    for (int j = 1; j < Nx - 1; j++) {
         double x = x0 + j*dx;
 
         // Retrieve fields at node j:
-        // For convenience, define some shorthand variables per node:
+        // For convenience, de fine some shorthand variables per node:
         // We'll directly use NV_Ith_S(y, idx(...)) in equations as before, 
         // but now for each j we have them spatially resolved.
 
@@ -349,122 +374,79 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
         // Handle boundaries by no-flux mirroring:
         for (int i = 0; i < Ns; i++) {
             double C_left, C_center, C_right;
-            if (j == 0) {
-                // no-flux: mirror the inside node
-                // C(-1) = C(1)
-                C_center = NV_Ith_S(y, idx(i,j,Ns,Nx));
-                C_right  = NV_Ith_S(y, idx(i,j+1,Ns,Nx));
-                C_left   = NV_Ith_S(y, idx(i,j+1,Ns,Nx));
-            } else if (j == Nx-1) {
-                C_center = NV_Ith_S(y, idx(i,j,Ns,Nx));
-                C_left   = NV_Ith_S(y, idx(i,j-1,Ns,Nx));
-                C_right  = NV_Ith_S(y, idx(i,j-1,Ns,Nx));
-            } else {
-                C_left   = NV_Ith_S(y, idx(i,j-1,Ns,Nx));
-                C_center = NV_Ith_S(y, idx(i,j,Ns,Nx));
-                C_right  = NV_Ith_S(y, idx(i,j+1,Ns,Nx));
-            }
+            // if (j == 0 || j == Nx-1){
+            //     NV_Ith_S(y, idx(i,j,Ns,Nx)) = 0.0
+            // }
+            
+            // if (j != 0 || j != Nx-1){
+            C_left   = NV_Ith_S(y, idx(i,j-1,Ns,Nx));
+            C_center = NV_Ith_S(y, idx(i,j,Ns,Nx));
+            C_right  = NV_Ith_S(y, idx(i,j+1,Ns,Nx));
             double d2Cdx2 = (C_right - 2*C_center + C_left)/(dx*dx);
             
-            // Compute the reaction terms as in the original single-point model:
-            // Original ODEs (from user code):
-            // We'll rewrite them here, but now use local values:
-            // Remember to replace all references to C_x with their local *Val variables.
-
             double val = 0.0; // placeholder for ydot
 
             if (i == 0) {
                 // dC_v/dt
-                // = P + (beta*e1 + delta)*C_gv_val
-                //   - (alpha*C_i_val + beta*C_g_val + gamma_val*(C_s_v + C_gv_val + 2*(C_2g_val + C_2gv_val) + 3*C_star_val))*C_v_val
                 val = P[j] + (beta*e1+delta)*C_gv_val 
                       - (alpha*C_i_val + beta*C_g_val + gamma_val*(C_s_v + C_gv_val + 2*(C_2g_val + C_2gv_val) + 3*C_star_val))*C_v_val;
                 // Add diffusion:
-                val += D_array[i]*d2Cdx2;
+                val += D_v*d2Cdx2;
             } else if (i == 1) {
                 // dC_i/dt
-                // = P - alpha*(C_v_val + C_gv_val + 2*C_2gv_val + 3*C_star_val + C_s_i)*C_i_val
                 val = P[j] - alpha*(C_v_val + C_gv_val + 2*C_2gv_val + 3*C_star_val + C_s_i)*C_i_val;
-                val += D_array[i]*d2Cdx2;
+                val += D_i*d2Cdx2;
             } else if (i == 2) {
                 // dC_g/dt
-                // = (G_He - beta*C_g_val*(C_v_val + 2*C_g_val + C_gv_val + 2*C_2g_val + 2*C_2gv_val + C_gb_val_local + epsilon*C_b_val)
-                //    + delta*(C_gv_val + 2*C_2gv_val + 4*C_2g_val + 3*C_star_val + m_val*C_b_val + M_gb_val + m_ppt_val*C_ppt)
-                //    + alpha*C_i_val*C_gv_val + beta*(e1*C_gv_val + e2*C_2gv_val))
                 val = (G_He[j] - beta*C_g_val*(C_v_val + 2*C_g_val + C_gv_val + 2*C_2g_val + 2*C_2gv_val + C_gb_val_local + epsilon*C_b_val)
                        + delta*(C_gv_val + 2*C_2gv_val + 4*C_2g_val + 3*C_star_val + m_val*C_b_val + M_gb_val + m_ppt_val*C_ppt)
                        + alpha*C_i_val*C_gv_val + beta*(e1*C_gv_val + e2*C_2gv_val));
-                val += D_array[i]*d2Cdx2;
+                val += D_g*d2Cdx2;
             } else if (i == 3) {
                 // dC_gv/dt
-                // = beta*C_g_val*C_v_val + (beta*e2+2*delta)*C_2gv_val
-                //   - (beta*e1 + delta + alpha*C_i_val + beta*C_g_val)*C_gv_val
                 val = beta*C_g_val*C_v_val + (beta*e2+2*delta)*C_2gv_val
                       - (beta*e1 + delta + alpha*C_i_val + beta*C_g_val)*C_gv_val;
-                val += D_array[i]*d2Cdx2;
             } else if (i == 4) {
                 // dC_2gv/dt
-                // = beta*C_g_val*C_gv_val + 3*delta*C_star_val + 2*gamma_val*C_v_val*C_2g_val
-                //   - (2*beta*C_g_val + 2*delta + beta*e2 + 2*alpha*C_i_val)*C_2gv_val
                 val = beta*C_g_val*C_gv_val + 3*delta*C_star_val + 2*gamma_val*C_v_val*C_2g_val
                       - (2*beta*C_g_val + 2*delta + beta*e2 + 2*alpha*C_i_val)*C_2gv_val;
-                val += D_array[i]*d2Cdx2;
             } else if (i == 5) {
                 // dC_2g/dt
-                // = alpha*C_i_val*C_2gv_val + 2*beta*C_g_val*C_g_val
-                //   - (2*delta + 2*gamma_val*C_v_val + 2*beta*C_g_val)*C_2g_val
                 val = alpha*C_i_val*C_2gv_val + 2*beta*C_g_val*C_g_val
                       - (2*delta + 2*gamma_val*C_v_val + 2*beta*C_g_val)*C_2g_val;
-                val += D_array[i]*d2Cdx2;
             } else if (i == 6) {
                 // dC_star/dt
-                // = 2*beta*C_g_val*(C_2gv_val + C_2g_val)
-                //   - 3*C_star_val*(delta + alpha*C_i_val + beta*C_g_val + gamma_val*C_v_val)
                 val = 2*beta*C_g_val*(C_2gv_val + C_2g_val)
                       - 3*C_star_val*(delta + alpha*C_i_val + beta*C_g_val + gamma_val*C_v_val);
-                val += D_array[i]*d2Cdx2;
             } else if (i == 7) {
                 // dC_b/dt
-                // = ((12*beta*C_g_val + 9*gamma_val*C_v_val)*C_star_val)/m_val
                 val = ((12*beta*C_g_val + 9*gamma_val*C_v_val)*C_star_val)/m_val;
-                val += D_array[i]*d2Cdx2;
             } else if (i == 8) {
                 // dm/dt
-                // = epsilon*beta*C_g_val - delta*m_val
                 val = epsilon*beta*C_g_val - delta*m_val;
-                val += D_array[i]*d2Cdx2;
             } else if (i == 9) {
                 // dR/dt
-                // = (a0^2/R_val)*(gamma_val*C_v_val - alpha*C_i_val - gamma_val*(e3 - e4))
                 // If negative, set to zero
                 {
                     double tmp = (a0*a0/R_val)*(gamma_val*C_v_val - alpha*C_i_val - gamma_val*(e3 - e4));
                     if (tmp < 0) tmp = 0.0;
                     val = tmp;
                 }
-                // Typically R might not diffuse, but if you had D_array[i] > 0, add it:
-                val += D_array[i]*d2Cdx2;
             } else if (i == 10) {
                 // dm_ppt/dt
-                // = epsilon_ppt*beta*C_g_val - delta*m_ppt_val
                 double epsilon_ppt_local = epsilon_ppt; // from bubble props
                 val = epsilon_ppt_local*beta*C_g_val - delta*m_ppt_val;
-                val += D_array[i]*d2Cdx2;
             } else if (i == 11) {
                 // dR_pt/dt
-                // = (a0^2 / sqrt(R_pt_val^2 + r_ppt^2))*(gamma_val*C_v_val - alpha*C_i_val - gamma_val*(e3_prime - e4))
                 {
                     double r_p_equiv = std::sqrt(R_pt_val*R_pt_val + r_ppt*r_ppt);
                     double tmp = (a0*a0 / r_p_equiv)*(gamma_val*C_v_val - alpha*C_i_val - gamma_val*(e3_prime - e4));
                     if (tmp < 0) tmp = 0.0;
                     val = tmp;
                 }
-                val += D_array[i]*d2Cdx2;
             } else if (i == 12) {
                 // dM_gb/dt
-                // = beta*C_gb_val_local*C_g_val - delta*M_gb_val
                 val = beta*C_gb_val_local*C_g_val - delta*M_gb_val;
-                val += D_array[i]*d2Cdx2;
             }
 
             NV_Ith_S(ydot, idx(i,j,Ns,Nx)) = val;
@@ -476,36 +458,33 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
 
 // Main function similar to original, but with Nx, Ns adjustments
 int main(int argc, char *argv[]) {
-    // auto props = get_properties(argc, argv);
-    auto props = get_properties();
+    auto props = get_properties(argc, argv);
+    // auto props = get_properties();
 
     Parameters params;
     params.props = props;
     params.Ns = 13; // 13 species
-    params.Nx = 20; // 100 spatial nodes
+    params.Nx = int(props["spatial_nodes"]); // 100 spatial nodes
     params.x0 = 0.0;
-    params.xN = 1.0;
+    params.xN = props["xN"];
 
     params.P.resize(params.Nx);
     params.G_He.resize(params.Nx);
 
     // Changed here
-    const double x_max = 1e-7;  // 1000 Å in meters
+    const double x_max = params.xN;  // 1000 Å in meters
     const double dx = x_max / (params.Nx - 1);  // Spatial step size
 
-    // Given coefficients for P(x) and G_He(x)
-    const double A_P = 6.05e-4;
-    const double B_P = 1.01;
-    const double C_P = 7.78e-3;
+    const double A_P = props["A_P"];
+    const double B_P = props["B_P"];
+    const double C_P = props["C_P"];
 
-    const double A_G = 2.00;
-    const double B_G = 0.68;
-    const double C_G = 6.80e-3;
+    const double A_G = props["A_G"];
+    const double B_G = props["B_G"];
+    const double C_G = props["C_G"];
 
     for (int j = 0; j < params.Nx; j++) {
         double x = j * dx;  // Convert index to physical distance
-
-        // Compute spatially varying P(x) and G_He(x)
         params.P[j] = A_P * pow(x, B_P) * exp(-C_P * x);
         params.G_He[j] = A_G * pow(x, B_G) * exp(-C_G * x);
     }
@@ -537,20 +516,12 @@ int main(int argc, char *argv[]) {
             else NV_Ith_S(y, idx(i,j,Ns,Nx)) = 1e-20;
         }
     }
-    
-    // Set initial conditions at the first node
-    // NV_Ith_S(y, idx(0,0,Ns,Nx)) = 1.e-20;     // C_v
-    // NV_Ith_S(y, idx(1,0,Ns,Nx)) = 1.e-20;     // C_i
-    // NV_Ith_S(y, idx(2,0,Ns,Nx)) = 1.e-20;     // C_g
-    // NV_Ith_S(y, idx(3,0,Ns,Nx)) = 1.e-20;     // C_gv
-    // NV_Ith_S(y, idx(4,0,Ns,Nx)) = 1.e-20;     // C_2gv
-    // NV_Ith_S(y, idx(5,0,Ns,Nx)) = 1.e-20;     // C_2g
-    // NV_Ith_S(y, idx(6,0,Ns,Nx)) = 1.e-20;     // C_star
-    // NV_Ith_S(y, idx(7,0,Ns,Nx)) = 1.e-20;     // C_b
-    // NV_Ith_S(y, idx(8,0,Ns,Nx)) = 2.0;     // m
-    // NV_Ith_S(y, idx(9,0,Ns,Nx)) = 5e-10;   // R
-    // NV_Ith_S(y, idx(10,0,Ns,Nx))= 2.0;     // m_ppt
-    // NV_Ith_S(y, idx(11,0,Ns,Nx))= 5e-10;   // R_pt
+
+    //Dirichlet BC
+    for (int i = 0; i < Ns - 5; i++) {
+        NV_Ith_S(y, idx(i, 0, Ns, Nx)) = 0;      // Left boundary (x = 0)
+        NV_Ith_S(y, idx(i, Nx-1, Ns, Nx)) = 0;  // Right boundary (x = L)
+    }
 
     void* cvode_mem = CVodeCreate(CV_BDF, sunctx);
     CVodeSetUserData(cvode_mem, &params);
@@ -589,19 +560,7 @@ int main(int argc, char *argv[]) {
         }
         std::cout << "\n";
     }
-
-    // print
-    // for (auto &row : state_matrix) {
-    //     for (auto &val : row) {
-    //         std::cout << val << " ";
-    //     }
-    //     std::cout << "\n";
-    // }
-    // std::cout << state_matrix << std::endl;
-    // results.push_back(state_matrix);
-    // results.push_back(state);
     
-
     for (int i = 1; i < time_points; i++) {
         double tout = t_eval[i];
         int flag = CVode(cvode_mem, tout, y, &t, CV_NORMAL);

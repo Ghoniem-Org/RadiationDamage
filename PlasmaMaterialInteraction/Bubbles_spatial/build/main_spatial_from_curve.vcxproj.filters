@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="C:\Users\Owner\Documents\Repos\RadiationDamage\PlasmaMaterialInteraction\Bubbles_spatial\main_spatial_from_curve.cpp">
+    <ClCompile Include="D:\dev\RadiationDamage\PlasmaMaterialInteraction\Bubbles_spatial\main_spatial_from_curve.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="C:\Users\Owner\Documents\Repos\RadiationDamage\PlasmaMaterialInteraction\Bubbles_spatial\CMakeLists.txt" />
+    <CustomBuild Include="D:\dev\RadiationDamage\PlasmaMaterialInteraction\Bubbles_spatial\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Source Files">
-      <UniqueIdentifier>{D94E47C4-6816-301E-A7EA-EFF64413B44A}</UniqueIdentifier>
+      <UniqueIdentifier>{04745D00-CFC8-3E7B-9FB6-A65291CA6C88}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

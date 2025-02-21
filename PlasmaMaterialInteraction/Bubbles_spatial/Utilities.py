@@ -3,8 +3,8 @@ import numpy as np
 
 def read_data():
     # Load the Excel file
-    df_steel = pd.read_excel('PlasmaMaterialInteraction\Bubbles_spatial\material_data.xlsx', sheet_name='steel', engine='openpyxl')
-
+    # df_steel = pd.read_excel('PlasmaMaterialInteraction\Bubbles_spatial\material_data.xlsx', sheet_name='steel', engine='openpyxl')
+    df_steel = pd.read_excel('./material_data.xlsx', sheet_name='steel', engine='openpyxl')
     # Convert the DataFrame to a dictionary
     # Assuming 'key' and 'value' are column names in your Excel file
     # parameters = df_steel.set_index('key').to_dict()['value']

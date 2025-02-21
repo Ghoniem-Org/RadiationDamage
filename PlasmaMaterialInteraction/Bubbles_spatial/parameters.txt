@@ -1,0 +1,14 @@
+t0 1e-6
+tf 1e6
+time_points 200
+spatial_nodes 20
+xN 4e-7
+A_P 7.60e-04
+B_P 0.96
+C_P 7.55e-03
+A_G 2.14e+00
+B_G 0.66
+C_G 6.70e-03
+T  898
+G 3e-3
+he_2_dpa 5e-6

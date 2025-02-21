@@ -1,10 +1,16 @@
 
 Bubbles/CMakeSettings.json
 Bubbles/__pycache__/
+Bubbles/.idea/
+Bubbles/build
 Bubbles/.vscode/
 Bubbles/.DS_Store
 PlasmaMaterialInteraction/Bubbles_spatial/__pycache__
-PPlasmaMaterialInteraction/Bubbles_spatial/.vs/
+PlasmaMaterialInteraction/Bubbles_spatial/.vs/
+PlasmaMaterialInteraction/.idea/
+PlasmaMaterialInteraction/Bubbles_spatial/build
 .vs/
 .vscode/
+.idea/
+.RadDamageVenv/
 __pycache__/

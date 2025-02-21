@@ -118,12 +118,38 @@ In a desired Python environment, install `numpy, pandas, matplotlib, openpyxl`.
 6. If everything has been installed correctly, we should see a pop-up TRIM window when executable the second code cell of the tutorial.
 
 # Running the ODE Solver with Spatial Nodes
-1. Run the main script in the correct Python environment. This calls the c++ excutable named `main_spatial` under `build`. Data is passed as a command line argument when calling the subprocess.
+1. Build the C++ exectuable in Release mode. Inside the `build` directory in `Bubbles_spatial`, first run:
+    ```
+    cmake -DCMAKE_BUILD_TYPE=Release ..
+    ```
+    Then,
+    ```
+    cmake --build . --config Release
+    ```
+    This will create an executable `main_spatial_from_curve.exe` in `build/Release/`
+
+2. Next, make sure `material_data.xlsx` and `parameters.txt` are available (both of them in `/Bubbles_spatial`). The python script will read these two files to extract the parameters. `parameters.txt` contains time, space related parameters, as well as coeffients from the curve fit. Do not change the variable names, the name and value should be separated with a single space. It should look like:
+    ```
+    t0 1e-6
+    tf 1e6
+    time_points 200
+    spatial_nodes 20
+    xN 4e-7
+    A_P 7.60e-04
+    B_P 0.96
+    C_P 7.55e-03
+    A_G 2.14e+00
+    B_G 0.66
+    C_G 6.70e-03
+    T  898
+    G 3e-3
+    he_2_dpa 5e-6
+    ```
+3. Run the python script by running the following inside `/Bubbles_spatial`:
     ```
     python main_spatial.py
     ```
-
-2. Code Walkthrough
+    Do not use the `Run` button on the IDE. All paths have been set relatively in our codebase and should run fine when the script executed in the terminal.
 
 <!-- # Results
 Runtime comparisons between original Python code (scipy odeint) vs. C++ (SUNDIALS) with controlled absolute, relative tolerances.
