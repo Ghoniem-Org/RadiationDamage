@@ -12,5 +12,5 @@ PlasmaMaterialInteraction/Bubbles_spatial/build
 .vs/
 .vscode/
 .idea/
-.RadDamageVenv/
+.radvenv/
 __pycache__/
