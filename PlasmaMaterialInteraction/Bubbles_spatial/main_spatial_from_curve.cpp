@@ -21,19 +21,11 @@ inline int idx(int i, int j, int Ns, int Nx) {
     return j*Ns + i;
 }
 
-// // Declare and define file-level constants
-// const double T = 625 + 273;
-// // const double T = 300;
-// const double G = 3e-3;
-// const double he_2_dpa = 5e-6;
-
-// Forward declarations for functions to get properties
 std::map<std::string, double> get_properties(int argc, char *argv[]) {
-// std::map<std::string, double> get_properties() {
+// std::map<std::string, double> get_properties() { // Comment when using command line arguments
 
     std::map<std::string, double> props;
 
-    // // Loop through all arguments
     for (int i = 1; i < argc; ++i) {
         std::string arg = argv[i];
         if (arg.substr(0, 2) == "--") { // Check if argument starts with "--"
@@ -136,9 +128,6 @@ std::map<std::string, double> get_properties(int argc, char *argv[]) {
     double beta = 48 * nu_g * exp(-Em_g / (k_B * T));
     double gamma = 48 * nu_v * exp(-Em_v / (k_B * T));
 
-    // double alpha = 48 * nu_i * exp(-Em_i / k_B * T);
-    // double beta = 48 * nu_g * exp(-Em_g / k_B * T);
-    // double gamma = 48 * nu_v * exp(-Em_v / k_B * T);
     // Thermal emission frequencies
     double e1 = exp(-Eb_v_g / (k_B * T));
     double e2 = exp(-Eb_v_2g / (k_B * T));
@@ -219,34 +208,16 @@ std::tuple<double,double,double> get_bubble_props(double R, double m, std::map<s
     return std::make_tuple(e3, epsilon, work);
 }
 
-// Compute production and loss terms, can be modified as needed
-// For demonstration, we just reuse the logic from the original code, 
-// now applied at each spatial node. If spatial dependence is required, 
-// you could incorporate `x` into these functions.
-static double compute_P(/* species, x, etc. */) {
-    // Placeholder: return some P value if needed
-    // In the original code, P was f*G (constant).
-    // If you want position-dependent P, incorporate x.
-    return 0.0; 
-}
-
-static double compute_L(/* species, x, etc. */) {
-    // Placeholder: return some L value if needed
-    return 0.0; 
-}
-
 // User data structure
-// changed here:
 struct Parameters {
     std::map<std::string, double> props;
     int Nx;
     int Ns;
     double x0;
     double xN;
-    std::vector<double> P;
+    std::vector<double> P; 
     std::vector<double> G_He;
 };
-
 
 // RHS function
 int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
@@ -268,7 +239,6 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
     double e4 = props["e4"];
     double e5 = props["e5"];
     double delta = props["delta"];
-    // Changed here
     const std::vector<double>& P = params->P;
     const std::vector<double>& G_He = params->G_He;
     double Omega = props["Omega"];
@@ -300,45 +270,22 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
     // 11: R_pt
     // 12: M_gb
 
-    // If you have species-specific diffusion coefficients, define them:
-    // For demonstration, assume all species have the same diffusion coefficient set 
-    // or retrieve from props if available. The original code had D_i, D_v, D_g...
-    // Let's assume C_v uses D_v, C_i uses D_i, C_g uses D_g, and others have negligible diffusion (or set to 0).
-    // Modify as needed.
+    // Diffusion coefficients
     double D_v = props["D_v"]; // for vacancies
     double D_i = props["D_i"]; // for interstitials
     double D_g = props["D_g"]; // for helium maybe
-    // For other species, set D=0 if they don't diffuse or if not defined.
-    // This is problem-dependent. We will just demonstrate a scenario:
-    // double D_array[13];
-    // Assign diffusion coefficients to species:
-    // This is an assumption:
-    // D_array[0] = D_v; // C_v
-    // D_array[1] = D_i; // C_i
-    // D_array[2] = D_g; // C_g
-    // // For others, assume no diffusion:
-    // for (int i = 3; i < 13; i++) D_array[i] = 0.0;
 
     // Prevents time evolution at boundaries
     for (int i = 0; i < Ns; i++) {
         // NV_Ith_S(y, idx(i,0,Ns,Nx)) = 0.0;
         // NV_Ith_S(y, idx(i,Nx - 1,Ns,Nx)) = 0.0;
         NV_Ith_S(ydot, idx(i,0,Ns,Nx)) = 0.0;
-        NV_Ith_S(ydot, idx(i,Nx - 1,Ns,Nx)) = 0.0;
+        // NV_Ith_S(ydot, idx(i,Nx - 1,Ns,Nx)) = 0.0;
     }
 
     // Compute derivatives
-    for (int j = 1; j < Nx - 1; j++) {
+    for (int j = 1; j < Nx; j++) {
         double x = x0 + j*dx;
-
-        // Retrieve fields at node j:
-        // For convenience, de fine some shorthand variables per node:
-        // We'll directly use NV_Ith_S(y, idx(...)) in equations as before, 
-        // but now for each j we have them spatially resolved.
-
-        // We'll follow the same ODE structure as the original single-point code, 
-        // but apply it at each node. The original code computed everything for a single cell;
-        // now we do it for each j.
 
         // Retrieve needed species at node j:
         double C_v_val   = NV_Ith_S(y, idx(0,j,Ns,Nx));
@@ -374,14 +321,16 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
         // Handle boundaries by no-flux mirroring:
         for (int i = 0; i < Ns; i++) {
             double C_left, C_center, C_right;
-            // if (j == 0 || j == Nx-1){
-            //     NV_Ith_S(y, idx(i,j,Ns,Nx)) = 0.0
-            // }
-            
-            // if (j != 0 || j != Nx-1){
+
             C_left   = NV_Ith_S(y, idx(i,j-1,Ns,Nx));
             C_center = NV_Ith_S(y, idx(i,j,Ns,Nx));
             C_right  = NV_Ith_S(y, idx(i,j+1,Ns,Nx));
+            
+            // Neumann BC on last spatial node
+            if (j == Nx - 1) {
+                C_right = C_center;
+            }
+
             double d2Cdx2 = (C_right - 2*C_center + C_left)/(dx*dx);
             
             double val = 0.0; // placeholder for ydot
@@ -459,21 +408,20 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
 // Main function similar to original, but with Nx, Ns adjustments
 int main(int argc, char *argv[]) {
     auto props = get_properties(argc, argv);
-    // auto props = get_properties();
+    // auto props = get_properties(); // Comment when using command line arguments
 
     Parameters params;
     params.props = props;
     params.Ns = 13; // 13 species
-    params.Nx = int(props["spatial_nodes"]); // 100 spatial nodes
+    params.Nx = int(props["spatial_nodes"]); // Read number of spatial nodes from props
     params.x0 = 0.0;
     params.xN = props["xN"];
 
     params.P.resize(params.Nx);
     params.G_He.resize(params.Nx);
 
-    // Changed here
-    const double x_max = params.xN;  // 1000 Å in meters
-    const double dx = x_max / (params.Nx - 1);  // Spatial step size
+    const double x_max = params.xN;  
+    const double dx = x_max / (params.Nx - 1);
 
     const double A_P = props["A_P"];
     const double B_P = props["B_P"];
@@ -509,18 +457,16 @@ int main(int argc, char *argv[]) {
         double x = params.x0 + j*(params.xN - params.x0)/(Nx-1);
         for (int i = 0; i < Ns; i++) {
             // Set initial conditions
-            // Just as in original code, you might set them from props or some initial guess
-            // For now, set a small floor:
             if (i == 8 || i == 10) NV_Ith_S(y, idx(i,j,Ns,Nx)) = 2.0;
             else if (i == 9 || i == 11) NV_Ith_S(y, idx(i,j,Ns,Nx)) = 5e-10;
             else NV_Ith_S(y, idx(i,j,Ns,Nx)) = 1e-20;
         }
     }
 
-    //Dirichlet BC
+    //Dirichlet BC on first spatial node
     for (int i = 0; i < Ns - 5; i++) {
         NV_Ith_S(y, idx(i, 0, Ns, Nx)) = 0;      // Left boundary (x = 0)
-        NV_Ith_S(y, idx(i, Nx-1, Ns, Nx)) = 0;  // Right boundary (x = L)
+        // NV_Ith_S(y, idx(i, Nx-1, Ns, Nx)) = 0;  // Right boundary (x = L)
     }
 
     void* cvode_mem = CVodeCreate(CV_BDF, sunctx);
