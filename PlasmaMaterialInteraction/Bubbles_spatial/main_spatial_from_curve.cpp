@@ -1,6 +1,9 @@
 // #include "parameters_spatial.h"
 #include <iomanip>
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <cstdlib>
 #include <string>
 #include <cmath>
 #include <map>
@@ -19,6 +22,86 @@
 // Inline indexing function
 inline int idx(int i, int j, int Ns, int Nx) {
     return j*Ns + i;
+}
+
+// Function to read boundary conditions from bc.txt
+std::pair<std::vector<int>, std::vector<double>> get_boundary_conditions() {
+    std::ifstream bc_file("./bc.txt");
+    if (!bc_file.is_open()) {
+        std::cerr << "Error opening bc.txt" << std::endl;
+        exit(1);
+    }
+
+    std::vector<int> bc_types(2, 0);         // Stores boundary types (1=Dirichlet, 2=Neumann)
+    std::vector<double> bc_values(26, 0.0);  // Stores 26 numerical values (13 for each boundary)
+
+    std::string line;
+
+    // Read first line (Left boundary)
+    if (getline(bc_file, line)) {
+        std::istringstream iss(line);
+        std::string bc_type_str;
+        iss >> bc_type_str;
+
+        // Assign BC type: Dirichlet (1), Neumann (2)
+        bc_types[0] = (bc_type_str == "Dirichlet") ? 1 : (bc_type_str == "Neumann") ? 2 : 0;
+
+        // Read 13 numerical values
+        for (int i = 0; i < 13; i++) {
+            if (!(iss >> bc_values[i])) {
+                std::cerr << "Error: Expected 13 numerical values in left boundary condition." << std::endl;
+                exit(1);
+            }
+        }
+    }
+
+    // Read second line (Right boundary)
+    if (getline(bc_file, line)) {
+        std::istringstream iss(line);
+        std::string bc_type_str;
+        iss >> bc_type_str;
+
+        // Assign BC type: Dirichlet (1), Neumann (2)
+        bc_types[1] = (bc_type_str == "Dirichlet") ? 1 : (bc_type_str == "Neumann") ? 2 : 0;
+
+        // Read 13 numerical values
+        for (int i = 0; i < 13; i++) {
+            if (!(iss >> bc_values[13 + i])) {  // Store in the second half of bc_values
+                std::cerr << "Error: Expected 13 numerical values in right boundary condition." << std::endl;
+                exit(1);
+            }
+        }
+    }
+
+    bc_file.close();
+    return {bc_types, bc_values};  // Return two vectors
+}
+
+// Function to read initial conditions from initial.txt
+std::vector<double> get_initial_conditions(){
+    std::ifstream init_file("./initial.txt");
+
+    if (!init_file.is_open()) {
+        std::cerr << "Error opening initial.txt" << std::endl;
+        exit(1);
+    }
+
+    std::vector<double> init_values(26, 0.0);
+    std::string line;
+
+    if (getline(init_file, line)) {
+        std::istringstream iss(line);
+
+        // Read 13 numerical values
+        for (int i = 0; i < 13; i++) {
+            if (!(iss >> init_values[i])) {
+                std::cerr << "Error: Expected 13 numerical values in left boundary condition." << std::endl;
+                exit(1);
+            }
+        }
+    }
+    init_file.close();
+    return init_values;
 }
 
 std::map<std::string, double> get_properties(int argc, char *argv[]) {
@@ -217,6 +300,8 @@ struct Parameters {
     double xN;
     std::vector<double> P; 
     std::vector<double> G_He;
+    std::vector<int> bc_types;
+    std::vector<double> bc_values;
 };
 
 // RHS function
@@ -229,6 +314,10 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
     double x0 = params->x0;
     double xN = params->xN;
     double dx = (xN - x0)/(Nx - 1);
+
+    // Extract boundary condtions
+    std::vector<int>& bc_types = params->bc_types;
+    std::vector<double>& bc_values = params->bc_values;
 
     // Extract parameters (same as original code)
     double alpha = props["alpha"];
@@ -275,16 +364,22 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
     double D_i = props["D_i"]; // for interstitials
     double D_g = props["D_g"]; // for helium maybe
 
-    // Prevents time evolution at boundaries
+    // Prevents time evolution at boundaries if Dirichlet BC
     for (int i = 0; i < Ns; i++) {
-        // NV_Ith_S(y, idx(i,0,Ns,Nx)) = 0.0;
-        // NV_Ith_S(y, idx(i,Nx - 1,Ns,Nx)) = 0.0;
-        NV_Ith_S(ydot, idx(i,0,Ns,Nx)) = 0.0;
-        // NV_Ith_S(ydot, idx(i,Nx - 1,Ns,Nx)) = 0.0;
+        if (bc_types[0] == 1) {
+            NV_Ith_S(ydot, idx(i,0,Ns,Nx)) = 0.0;
+        }
+        if (bc_types[1] == 1) {
+            NV_Ith_S(ydot, idx(i,Nx - 1,Ns,Nx)) = 0.0;
+        }
     }
 
+    // Compute start, end indices of spation nodes
+    int start_idx = (bc_types[0] == 1) ? 1 : 0;
+    int end_idx = (bc_types[1] == 1) ? Nx - 1 : Nx;
+
     // Compute derivatives
-    for (int j = 1; j < Nx; j++) {
+    for (int j = start_idx; j < end_idx; j++) {
         double x = x0 + j*dx;
 
         // Retrieve needed species at node j:
@@ -326,9 +421,12 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
             C_center = NV_Ith_S(y, idx(i,j,Ns,Nx));
             C_right  = NV_Ith_S(y, idx(i,j+1,Ns,Nx));
             
-            // Neumann BC on last spatial node
-            if (j == Nx - 1) {
-                C_right = C_center;
+            // Neumann BC if applicable
+            if (j == 0 && bc_types[0] == 2) {
+                C_left = C_center - dx*bc_values[i];
+            }
+            if (j == Nx - 1 && bc_types[1] == 2) {
+                C_right = C_center + dx*bc_values[13 + i];
             }
 
             double d2Cdx2 = (C_right - 2*C_center + C_left)/(dx*dx);
@@ -405,10 +503,18 @@ int rhs(sunrealtype t, N_Vector y, N_Vector ydot, void *user_data) {
     return 0;
 }
 
+
 // Main function similar to original, but with Nx, Ns adjustments
 int main(int argc, char *argv[]) {
+    // Process command line arguments
     auto props = get_properties(argc, argv);
     // auto props = get_properties(); // Comment when using command line arguments
+
+    // Read BC from bc.txt
+    auto [bc_types, bc_values] = get_boundary_conditions();
+
+    // Read Initial conditions from initial.txt
+    auto init_values = get_initial_conditions();
 
     Parameters params;
     params.props = props;
@@ -416,6 +522,10 @@ int main(int argc, char *argv[]) {
     params.Nx = int(props["spatial_nodes"]); // Read number of spatial nodes from props
     params.x0 = 0.0;
     params.xN = props["xN"];
+
+    // Include BC values to params
+    params.bc_types = bc_types;
+    params.bc_values = bc_values;
 
     params.P.resize(params.Nx);
     params.G_He.resize(params.Nx);
@@ -447,8 +557,6 @@ int main(int argc, char *argv[]) {
     double reltol = 1e-8;
     double abstol = 1e-20;
 
-   
-
     SUNContext sunctx;
     SUNContext_Create(NULL, &sunctx);
 
@@ -457,17 +565,29 @@ int main(int argc, char *argv[]) {
         double x = params.x0 + j*(params.xN - params.x0)/(Nx-1);
         for (int i = 0; i < Ns; i++) {
             // Set initial conditions
-            if (i == 8 || i == 10) NV_Ith_S(y, idx(i,j,Ns,Nx)) = 2.0;
-            else if (i == 9 || i == 11) NV_Ith_S(y, idx(i,j,Ns,Nx)) = 5e-10;
-            else NV_Ith_S(y, idx(i,j,Ns,Nx)) = 1e-20;
+            NV_Ith_S(y, idx(i,j,Ns,Nx)) = init_values[i]; 
+            // if (i == 8 || i == 10) NV_Ith_S(y, idx(i,j,Ns,Nx)) = 2.0;
+            // else if (i == 9 || i == 11) NV_Ith_S(y, idx(i,j,Ns,Nx)) = 5e-10;
+            // else NV_Ith_S(y, idx(i,j,Ns,Nx)) = 1e-20;
         }
     }
 
-    //Dirichlet BC on first spatial node
-    for (int i = 0; i < Ns - 5; i++) {
-        NV_Ith_S(y, idx(i, 0, Ns, Nx)) = 0;      // Left boundary (x = 0)
-        // NV_Ith_S(y, idx(i, Nx-1, Ns, Nx)) = 0;  // Right boundary (x = L)
+    // Apply Dirichlet BC if applicable
+    if (params.bc_types[0] == 1) {
+        for (int i = 0; i < Ns; i++) {
+            NV_Ith_S(y, idx(i, 0, Ns, Nx)) = params.bc_values[i];
+        }
     }
+    if (params.bc_types[1] == 1) {
+        for (int i = 0; i < Ns; i++) {
+            NV_Ith_S(y, idx(i, Nx-1, Ns, Nx)) = params.bc_values[13 + i];
+        }
+    }
+    
+    // for (int i = 0; i < Ns - 5; i++) {
+    //     NV_Ith_S(y, idx(i, 0, Ns, Nx)) = 0;      // Left boundary (x = 0)
+    //     // NV_Ith_S(y, idx(i, Nx-1, Ns, Nx)) = 0;  // Right boundary (x = L)
+    // }
 
     void* cvode_mem = CVodeCreate(CV_BDF, sunctx);
     CVodeSetUserData(cvode_mem, &params);

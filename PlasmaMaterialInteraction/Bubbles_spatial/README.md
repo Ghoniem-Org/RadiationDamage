@@ -118,17 +118,10 @@ In a desired Python environment, install `numpy, pandas, matplotlib, openpyxl`.
 6. If everything has been installed correctly, we should see a pop-up TRIM window when executable the second code cell of the tutorial.
 
 # Running the ODE Solver with Spatial Nodes
-1. Build the C++ exectuable in Release mode. Inside the `build` directory in `Bubbles_spatial`, first run:
-    ```
-    cmake -DCMAKE_BUILD_TYPE=Release ..
-    ```
-    Then,
-    ```
-    cmake --build . --config Release
-    ```
-    This will create an executable `main_spatial_from_curve.exe` in `build/Release/`
+## Inputs
+The input text files: `material_data.xlsx`, `parameters.txt`, `bc.txt`, `initial.txt` are **required** to be in the directory `/Bubbles_spatial`. The python script reads `material_data.xlsx` and `parameters.txt`, while `bc.txt`, `initial.txt` are taken care of within C++. Here are quick descriptions of the input .txt files.
 
-2. Next, make sure `material_data.xlsx` and `parameters.txt` are available (both of them in `/Bubbles_spatial`). The python script will read these two files to extract the parameters. `parameters.txt` contains time, space related parameters, as well as coeffients from the curve fit. Do not change the variable names, the name and value should be separated with a single space. It should look like:
+* `paramters.txt` contains time, space related parameters, as well as curve fit coefficients. Do not change the variable names, the name and value should be separated with a single space. It should look like:
     ```
     t0 1e-6
     tf 1e6
@@ -145,7 +138,29 @@ In a desired Python environment, install `numpy, pandas, matplotlib, openpyxl`.
     G 3e-3
     he_2_dpa 5e-6
     ```
-3. Run the python script by running the following inside `/Bubbles_spatial`:
+* `bc.txt` specifies the boundary condition types for the spatial boundaries and its respective values. The first line contains information for the leftmost spatial boundary (index = 0). The second line contains information for the rightmost spatial boundary (index = Nx - 1). The input values must follow the same ordering as the code, while being separated with a single space.
+    ```
+    Dirichlet 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 2 5e-10 2 5e-10 1e-20
+    Neumann  0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0
+    ```
+
+* `initial.txt` contains the initial values of each state variable. All spatial nodes share common values.
+    ```
+    1e-20 1e-20 1e-20 1e-20 1e-20 1e-20 1e-20 1e-20 2 5e-10 2 5e-10 1e-20
+    ```
+
+## Building and Execution
+1. Build the C++ exectuable in Release mode. Inside the `build` directory in `Bubbles_spatial`, first run:
+    ```
+    cmake -DCMAKE_BUILD_TYPE=Release ..
+    ```
+    Then,
+    ```
+    cmake --build . --config Release
+    ```
+    This will create an executable `main_spatial_from_curve.exe` in `build/Release/`
+
+2. Run the python script by running the following inside `/Bubbles_spatial`:
     ```
     python main_spatial.py
     ```

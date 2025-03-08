@@ -27,7 +27,7 @@ for timestamp in timestamps:
 
     try:
         df = pd.read_excel(file_path, sheet_name=sheet_name, header=None)  # Read closest sheet
-        first_row = df.iloc[1, :len(distances)]  # Get first row data
+        first_row = df.iloc[0, :len(distances)]  # Get first row data
 
         # Plot data
         plt.figure(figsize=(8, 5))
