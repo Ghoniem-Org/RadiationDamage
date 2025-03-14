@@ -2,7 +2,7 @@ from Utilities import get_props, FigureGenerator
 
 font1 = 16
 font2 = 18
-fig_path = r'.\PythonValidation\Bubbles_python\Figures'
+fig_path = r'.\Figures'
 
 props = get_props()
 Omega = props['Omega']

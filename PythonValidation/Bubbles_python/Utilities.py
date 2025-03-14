@@ -10,8 +10,8 @@ font2 = 18
 T = 625 + 273
 G = 3e-3
 he_2_dpa = 5e-6
-# data_file =r'C:\Users\Owner\Documents\Repos\RadiationDamage\Old\Bubbles_python\material_data.xlsx'
-data_file =r'PythonValidation\Bubbles_python\material_data.xlsx'
+#data_file =r'C:\Users\Owner\Documents\Repos\RadiationDamage\PythonValidation\Bubbles_python\material_data.xlsx'
+data_file =r'.\material_data.xlsx'
 # Load the Excel file
 # df_steel = pd.read_excel('material_data.xlsx', sheet_name='steel', engine='openpyxl')
 df_steel = pd.read_excel(data_file, sheet_name='steel', engine='openpyxl')

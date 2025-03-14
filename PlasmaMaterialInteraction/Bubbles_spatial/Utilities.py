@@ -8,7 +8,6 @@ def read_data():
     # Convert the DataFrame to a dictionary
     # Assuming 'key' and 'value' are column names in your Excel file
     # parameters = df_steel.set_index('key').to_dict()['value']
-
     # List of parameter names you want to extract
     input_data = ['nu_v', 'nu_i', 'nu_g', 'Em_v', 'Em_i', 'Em_g',
                   'Eb_v_g', 'Eb_v_2g', 'Eb_2g', 'Ef_v', 'a0', 'Omega',

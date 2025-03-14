@@ -30,13 +30,12 @@ if __name__ == '__main__':
             if key == "spatial_nodes":
                 spatial_nodes = value
 
-
     print(keyword_arguments)
     # Solve the ODE by running c++ executable
-    result = subprocess.run(['./build/Release/main_spatial_from_curve'] + keyword_arguments, capture_output=True, text=True)
+    #result = subprocess.run(['./build/Release/main_spatial_from_curve'] + keyword_arguments, capture_output=True, text=True)
     # import subprocess
-    # excutable_path = r'C:\Users\Owner\Documents\Repos\RadiationDamage\PlasmaMaterialInteraction\Bubbles_spatial\build\Debug\main_spatial_from_curve.exe'
-    # result = subprocess.run([excutable_path] + keyword_arguments, capture_output=True, text=True)
+    excutable_path = r'C:\Users\Owner\Documents\Repos\RadiationDamage\PlasmaMaterialInteraction\Bubbles_spatial\build\Debug\main_spatial_from_curve.exe'
+    result = subprocess.run([excutable_path] + keyword_arguments, capture_output=True, text=True)
 
     # Print output
     print(result.stdout)
